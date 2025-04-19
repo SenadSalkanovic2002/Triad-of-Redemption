@@ -37,7 +37,7 @@ public abstract class BaseMap {
         for (MapObject obj : map.getLayers().get("start").getObjects()) {
             if (obj instanceof RectangleMapObject && "Start".equals(obj.getName())) {
                 Rectangle rect = ((RectangleMapObject) obj).getRectangle();
-                player.setPosition(rect.x, rect.y);
+                player.setPosition(rect.x, rect.y-100);// had to fix the spawn location, player spawned stuck inside the trees
             }
         }
 
@@ -53,6 +53,7 @@ public abstract class BaseMap {
 
     public void update(float delta) {
         player.handleInput(delta);
+        player.chooseAnimation(); // updates the current animation on every render, should be used in other maps as well
         if (checkTransition()) switchMap = true;
     }
 
