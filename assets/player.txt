@@ -332,7 +332,35 @@ walk_d
   orig: 192, 192
   offset: 0, 0
   index: 1
+walk_d
+  rotate: false
+  xy: 384, 192
+  size: 192, 192
+  orig: 192, 192
+  offset: 0, 0
+  index: 2
 walk_u
+  rotate: false
+  xy: 1344, 768
+  size: 192, 192
+  orig: 192, 192
+  offset: 0, 0
+  index: 1
+walk_u
+  rotate: false
+  xy: 1536, 192
+  size: 192, 192
+  orig: 192, 192
+  offset: 0, 0
+  index: 2
+idle_d
+  rotate: false
+  xy: 1152, 768
+  size: 192, 192
+  orig: 192, 192
+  offset: 0, 0
+  index: 1
+idle_u
   rotate: false
   xy: 1344, 768
   size: 192, 192

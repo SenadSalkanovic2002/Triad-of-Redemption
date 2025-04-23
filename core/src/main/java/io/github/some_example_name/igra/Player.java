@@ -23,7 +23,7 @@ public class Player {
     private int health, score;
     private boolean gameOver, gameWon, inSlowZone;
     private BaseMap map;
-    private Animation<TextureRegion> idle, walkSide, walkUp, walkDown, attackSide, altAttackSide, attackUp, attackDown;
+    private Animation<TextureRegion> idle, walkSide, walkUp, walkDown, attackSide, altAttackSide, attackUp, attackDown, idleUp, idleDown;
     private TextureRegion currentFrame; // current part of the animation drawn
     private float animationTime; // used to know which animation frame to play
     private String currentState; // remembers what animation is currently being played
@@ -44,9 +44,11 @@ public class Player {
         this.gameWon = false;
 
         idle = new Animation<TextureRegion>(0.2f, texture.findRegions("idle"), Animation.PlayMode.LOOP);
+        idleDown = new Animation<TextureRegion>(0.2f, texture.findRegions("idle_d"), Animation.PlayMode.LOOP);
+        idleUp = new Animation<TextureRegion>(0.2f, texture.findRegions("idle_u"), Animation.PlayMode.LOOP);
         walkSide = new Animation<TextureRegion>(0.1f, texture.findRegions("walk"), Animation.PlayMode.LOOP);
-        walkUp = new Animation<TextureRegion>(0.1f, texture.findRegions("walk_u"), Animation.PlayMode.LOOP);
-        walkDown = new Animation<TextureRegion>(0.1f, texture.findRegions("walk_d"), Animation.PlayMode.LOOP);
+        walkUp = new Animation<TextureRegion>(0.2f, texture.findRegions("walk_u"), Animation.PlayMode.LOOP);
+        walkDown = new Animation<TextureRegion>(0.15f, texture.findRegions("walk_d"), Animation.PlayMode.LOOP);
         attackSide = new Animation<TextureRegion>(0.1f, texture.findRegions("atk"), Animation.PlayMode.NORMAL);
         altAttackSide = new Animation<TextureRegion>(0.1f, texture.findRegions("alt_atk"), Animation.PlayMode.NORMAL);
         attackUp = new Animation<TextureRegion>(0.1f, texture.findRegions("atk_u"), Animation.PlayMode.NORMAL);
@@ -83,6 +85,7 @@ public class Player {
             dy -= currentSpeed * delta;
             lastDirection = "down";
         }
+        // This makes the animation/attacking priority be to the side
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             dx -= currentSpeed * delta;
             lastDirection = "left";
@@ -212,20 +215,71 @@ public class Player {
 
         // Update current frame
         switch (currentState) {
-            case "walk":
-                currentFrame = walkSide.getKeyFrame(animationTime, true);
+            case "walk": {
+                switch (lastDirection) {
+                    case "up":
+                        currentFrame = walkUp.getKeyFrame(animationTime, true);
+                        break;
+                    case "down":
+                        currentFrame = walkDown.getKeyFrame(animationTime, true);
+                        break;
+                    case "left":
+                    case "right":
+                        currentFrame = walkSide.getKeyFrame(animationTime, true);
+                        boolean shouldFaceLeft = lastDirection.equals("left");
+                        if (currentFrame.isFlipX() != shouldFaceLeft) {
+                            currentFrame.flip(true, false);
+                        }
+                        //facingLeft = shouldFaceLeft;
+                        break;
+                }
                 break;
+            }
             case "attack":
-                currentFrame = attackSide.getKeyFrame(animationTime, false);
+            {
+                switch (lastDirection) {
+                    case "up":
+                        currentFrame = attackUp.getKeyFrame(animationTime, false);
+                        break;
+                    case "down":
+                        currentFrame = attackDown.getKeyFrame(animationTime, false);
+                        break;
+                    case "left":
+                    case "right":
+                        currentFrame = attackSide.getKeyFrame(animationTime, false);
+                        boolean shouldFaceLeft = lastDirection.equals("left");
+                        if (currentFrame.isFlipX() != shouldFaceLeft) {
+                            currentFrame.flip(true, false);
+                        }
+                        break;
+                }
                 if (attackSide.isAnimationFinished(animationTime)) {
                     isAttacking = false;
                     currentState = "idle";
                     animationTime = 0;
                 }
                 break;
+            }
             default:
-                currentFrame = idle.getKeyFrame(animationTime, true);
+            {
+                switch (lastDirection) {
+                    case "up":
+                        currentFrame = idleUp.getKeyFrame(animationTime, true);
+                        break;
+                    case "down":
+                        currentFrame = idleDown.getKeyFrame(animationTime, true);
+                        break;
+                    case "left":
+                    case "right":
+                        currentFrame = idle.getKeyFrame(animationTime, true);
+                        boolean shouldFaceLeft = lastDirection.equals("left");
+                        if (currentFrame.isFlipX() != shouldFaceLeft) {
+                            currentFrame.flip(true, false);
+                        }
+                        break;
+                }
                 break;
+            }
         }
     }
 }
