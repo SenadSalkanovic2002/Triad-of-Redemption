@@ -27,6 +27,7 @@ public class MainGame extends ApplicationAdapter {
         camera.setToOrtho(false, 1280, 720);
         batch = new SpriteBatch();
         font = new BitmapFont();
+
         playerTexture = new TextureAtlas("assets/player.txt");
         damageSound = Gdx.audio.newSound(Gdx.files.internal("tiled/hit.mp3"));
         pickupSound = Gdx.audio.newSound(Gdx.files.internal("tiled/pickup.mp3"));

@@ -49,54 +49,54 @@ public class Player {
 
         idle = new Animation<TextureRegion>(
             GameConfig.PLAYER_ANIMATION_IDLE_DURATION,
-            texture.findRegions("idle"),
+            texture.findRegions(RegionNames.PLAYER_IDLE),
             Animation.PlayMode.LOOP
         );
         idleDown = new Animation<TextureRegion>(
             GameConfig.PLAYER_ANIMATION_IDLE_DURATION,
-            texture.findRegions("idle_d"),
+            texture.findRegions(RegionNames.PLAYER_IDLE_DOWN),
             Animation.PlayMode.LOOP
         );
         idleUp = new Animation<TextureRegion>(
             GameConfig.PLAYER_ANIMATION_IDLE_DURATION,
-            texture.findRegions("idle_u"),
+            texture.findRegions(RegionNames.PLAYER_IDLE_UP),
             Animation.PlayMode.LOOP
         );
 
         walkSide = new Animation<TextureRegion>(
             GameConfig.PLAYER_ANIMATION_WALKING_DURATION,
-            texture.findRegions("walk"),
+            texture.findRegions(RegionNames.PLAYER_WALKING),
             Animation.PlayMode.LOOP
         );
         walkUp = new Animation<TextureRegion>(
             GameConfig.PLAYER_ANIMATION_WALKING_DURATION,
-            texture.findRegions("walk_u"),
+            texture.findRegions(RegionNames.PLAYER_WALKING_UP),
             Animation.PlayMode.LOOP
         );
         walkDown = new Animation<TextureRegion>(
             GameConfig.PLAYER_ANIMATION_WALKING_DURATION,
-            texture.findRegions("walk_d"),
+            texture.findRegions(RegionNames.PLAYER_WALKING_DOWN),
             Animation.PlayMode.LOOP
         );
 
         attackSide = new Animation<TextureRegion>(
             GameConfig.PLAYER_ANIMATION_ATTACKING_SPEED,
-            texture.findRegions("atk"),
+            texture.findRegions(RegionNames.PLAYER_ATTACKING),
             Animation.PlayMode.NORMAL
         );
         altAttackSide = new Animation<TextureRegion>(
             GameConfig.PLAYER_ANIMATION_ATTACKING_SPEED,
-            texture.findRegions("alt_atk"),
+            texture.findRegions(RegionNames.PLAYER_ATTACKING_ALTERNATIVE),
             Animation.PlayMode.NORMAL
         );
         attackUp = new Animation<TextureRegion>(
             GameConfig.PLAYER_ANIMATION_ATTACKING_SPEED,
-            texture.findRegions("atk_u"),
+            texture.findRegions(RegionNames.PLAYER_ATTACKING_UP),
             Animation.PlayMode.NORMAL
         );
         attackDown = new Animation<TextureRegion>(
             GameConfig.PLAYER_ANIMATION_ATTACKING_SPEED,
-            texture.findRegions("atk_d"),
+            texture.findRegions(RegionNames.PLAYER_ATTACKING_DOWN),
             Animation.PlayMode.NORMAL
         );
 
@@ -121,6 +121,8 @@ public class Player {
 
 
     public void handleInput(float delta) {
+        if (currentState == PlayerState.ATTACKING) return; // don't allow movement while attacking
+
         //also updates the attack direction
         float dx = 0, dy = 0;
         float currentSpeed = inSlowZone ? speed / 2 : speed;
