@@ -37,7 +37,7 @@ public class Player {
         this.damageSound = damageSound;
         this.pickupSound = pickupSound;
         this.bounds = new Rectangle(0, 0, 96, 96);
-        this.speed = 100f;
+        this.speed = 300f;
         this.health = 100;
         this.score = 0;
         this.gameOver = false;
