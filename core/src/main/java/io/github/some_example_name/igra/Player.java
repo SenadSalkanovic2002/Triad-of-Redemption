@@ -15,10 +15,6 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 
-import io.github.some_example_name.igra.PlayerState;
-import io.github.some_example_name.igra.PlayerDirection;
-
-
 public class Player {
     private float x, y, speed;
     private final Rectangle bounds;
@@ -30,8 +26,8 @@ public class Player {
     private Animation<TextureRegion> idle, walkSide, walkUp, walkDown, attackSide, altAttackSide, attackUp, attackDown, idleUp, idleDown;
     private TextureRegion currentFrame; // current part of the animation drawn
     private float animationTime; // used to know which animation frame to play
-    private PlayerState currentState; // remembers what animation is currently being played
-    private PlayerDirection lastDirection; // will be used for the attack directions
+    private CharacterState currentState; // remembers what animation is currently being played
+    private CharacterDirection lastDirection; // will be used for the attack directions
     private boolean isAttacking = false; // makes the animation play fully when space is pressed
 
     private final ShapeRenderer shapeRenderer = new ShapeRenderer(); // debug thingy for the bounds rectangle
@@ -40,7 +36,7 @@ public class Player {
         this.texture = texture;
         this.damageSound = damageSound;
         this.pickupSound = pickupSound;
-        this.bounds = new Rectangle(0, 0, 96, 96);
+        this.bounds = new Rectangle(0, 0, GameConfig.PLAYER_WIDTH, GameConfig.PLAYER_HEIGHT);
         this.speed = GameConfig.PLAYER_SPEED;
         this.health = GameConfig.PLAYER_HEALTH;
         this.score = 0;
@@ -80,28 +76,28 @@ public class Player {
         );
 
         attackSide = new Animation<TextureRegion>(
-            GameConfig.PLAYER_ANIMATION_ATTACKING_SPEED,
+            GameConfig.PLAYER_ANIMATION_ATTACKING_DURATION,
             texture.findRegions(RegionNames.PLAYER_ATTACKING),
             Animation.PlayMode.NORMAL
         );
         altAttackSide = new Animation<TextureRegion>(
-            GameConfig.PLAYER_ANIMATION_ATTACKING_SPEED,
+            GameConfig.PLAYER_ANIMATION_ATTACKING_DURATION,
             texture.findRegions(RegionNames.PLAYER_ATTACKING_ALTERNATIVE),
             Animation.PlayMode.NORMAL
         );
         attackUp = new Animation<TextureRegion>(
-            GameConfig.PLAYER_ANIMATION_ATTACKING_SPEED,
+            GameConfig.PLAYER_ANIMATION_ATTACKING_DURATION,
             texture.findRegions(RegionNames.PLAYER_ATTACKING_UP),
             Animation.PlayMode.NORMAL
         );
         attackDown = new Animation<TextureRegion>(
-            GameConfig.PLAYER_ANIMATION_ATTACKING_SPEED,
+            GameConfig.PLAYER_ANIMATION_ATTACKING_DURATION,
             texture.findRegions(RegionNames.PLAYER_ATTACKING_DOWN),
             Animation.PlayMode.NORMAL
         );
 
-        currentState = PlayerState.IDLE;
-        lastDirection = PlayerDirection.RIGHT;
+        currentState = CharacterState.IDLE;
+        lastDirection = CharacterDirection.RIGHT;
         animationTime = 0f;
     }
 
@@ -121,27 +117,27 @@ public class Player {
 
 
     public void handleInput(float delta) {
-        if (currentState == PlayerState.ATTACKING) return; // don't allow movement while attacking
+        if (currentState == CharacterState.ATTACKING) return; // don't allow movement while attacking
 
         //also updates the attack direction
         float dx = 0, dy = 0;
         float currentSpeed = inSlowZone ? speed / 2 : speed;
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             dy += currentSpeed * delta;
-            lastDirection = PlayerDirection.UP;
+            lastDirection = CharacterDirection.UP;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             dy -= currentSpeed * delta;
-            lastDirection = PlayerDirection.DOWN;
+            lastDirection = CharacterDirection.DOWN;
         }
         // This makes the animation/attacking priority be to the side
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             dx -= currentSpeed * delta;
-            lastDirection = PlayerDirection.LEFT;
+            lastDirection = CharacterDirection.LEFT;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             dx += currentSpeed * delta;
-            lastDirection = PlayerDirection.RIGHT;
+            lastDirection = CharacterDirection.RIGHT;
         }
         x += dx;
         y += dy;
@@ -246,15 +242,15 @@ public class Player {
             Gdx.input.isKeyPressed(Input.Keys.S) ||
             Gdx.input.isKeyPressed(Input.Keys.D);
 
-        PlayerState newState;
+        CharacterState newState;
 
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE) || isAttacking) {
-            newState = PlayerState.ATTACKING;
+            newState = CharacterState.ATTACKING;
             isAttacking = true;
         } else if (isMoving) {
-            newState = PlayerState.WALKING;
+            newState = CharacterState.WALKING;
         } else {
-            newState = PlayerState.IDLE;
+            newState = CharacterState.IDLE;
         }
 
         if (!newState.equals(currentState)) {
@@ -275,7 +271,7 @@ public class Player {
                     case LEFT:
                     case RIGHT:
                         currentFrame = walkSide.getKeyFrame(animationTime, true);
-                        boolean shouldFaceLeft = lastDirection.equals(PlayerDirection.LEFT);
+                        boolean shouldFaceLeft = lastDirection.equals(CharacterDirection.LEFT);
                         if (currentFrame.isFlipX() != shouldFaceLeft) {
                             currentFrame.flip(true, false);
                         }
@@ -296,7 +292,7 @@ public class Player {
                     case LEFT:
                     case RIGHT:
                         currentFrame = attackSide.getKeyFrame(animationTime, false);
-                        boolean shouldFaceLeft = lastDirection.equals(PlayerDirection.LEFT);
+                        boolean shouldFaceLeft = lastDirection.equals(CharacterDirection.LEFT);
                         if (currentFrame.isFlipX() != shouldFaceLeft) {
                             currentFrame.flip(true, false);
                         }
@@ -304,7 +300,7 @@ public class Player {
                 }
                 if (attackSide.isAnimationFinished(animationTime)) {
                     isAttacking = false;
-                    currentState = PlayerState.IDLE;
+                    currentState = CharacterState.IDLE;
                     animationTime = 0;
                 }
                 break;
@@ -321,7 +317,7 @@ public class Player {
                     case LEFT:
                     case RIGHT:
                         currentFrame = idle.getKeyFrame(animationTime, true);
-                        boolean shouldFaceLeft = lastDirection.equals(PlayerDirection.LEFT);
+                        boolean shouldFaceLeft = lastDirection.equals(CharacterDirection.LEFT);
                         if (currentFrame.isFlipX() != shouldFaceLeft) {
                             currentFrame.flip(true, false);
                         }
