@@ -2,7 +2,6 @@ package io.github.some_example_name.igra;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -24,6 +23,7 @@ public class Enemy {
     private CharacterState currentState;
     private CharacterDirection lastDirection;
     private boolean isAttacking = false;
+    private boolean isFacingLeft = false;
 
     private final ShapeRenderer shapeRenderer = new ShapeRenderer();
 
@@ -91,21 +91,42 @@ public class Enemy {
         this.map = map;
     }
 
-    public void update(float delta) {
+    public void update(Player player, float delta) {
         animationTime += delta;
 
-        // Example logic to cycle through states for testing
-        if (animationTime < 2) {
-            currentState = CharacterState.IDLE;
-        } else if (animationTime < 4) {
-            currentState = CharacterState.WALKING;
-        } else if (animationTime < 6) {
-            currentState = CharacterState.ATTACKING;
+        // Get direction vector to player
+        float directionX = player.getX() - x;
+        float directionY = player.getY() - y;
+
+        // Calculate distance to player
+        float distanceToPlayer = (float) Math.sqrt(directionX * directionX + directionY * directionY);
+
+        // Only take action if player is within vision radius
+        if (distanceToPlayer <= GameConfig.ENEMY_VISION_DISTANCE) {
+            // Player is within vision radius
+
+            // Set the state based on distance and movement
+            if (distanceToPlayer > GameConfig.ENEMY_ATTACK_DISTANCE) { // Not too close to the player
+                // Normalize direction vector
+                directionX /= distanceToPlayer;
+                directionY /= distanceToPlayer;
+
+                isFacingLeft = directionX < 0;
+
+                // Move toward player
+                x += directionX * GameConfig.ENEMY_SPEED * delta;
+                y += directionY * GameConfig.ENEMY_SPEED * delta;
+
+                currentState = CharacterState.WALKING;
+            } else { // Close enough to attack
+                currentState = CharacterState.ATTACKING;
+            }
         } else {
-            animationTime = 0; // Reset time to loop states
+            // Player is outside vision radius, enemy stays idle
+            currentState = CharacterState.IDLE;
         }
 
-        // Example logic to set the current frame based on the state
+        // Set the current frame based on the state
         switch (currentState) {
             case IDLE:
                 currentFrame = idle.getKeyFrame(animationTime);
@@ -120,22 +141,29 @@ public class Enemy {
                 currentFrame = idle.getKeyFrame(animationTime);
         }
 
-        // Example movement logic
-        x += delta * 10;
+        // Update collision bounds
         bounds.setPosition(x, y);
     }
 
     public void render(SpriteBatch batch) {
         animationTime += Gdx.graphics.getDeltaTime();
-        batch.draw(currentFrame, bounds.x, bounds.y, bounds.width, bounds.height); // Align texture with rectangle
-        batch.end();
 
-        shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(Color.RED);
-        shapeRenderer.rect(bounds.x, bounds.y, bounds.width, bounds.height);
-        shapeRenderer.end();
+        // Calculate draw parameters based on facing direction
+        float drawX = isFacingLeft ? bounds.x + bounds.width : bounds.x;
+        float drawWidth = isFacingLeft ? -bounds.width : bounds.width;
 
-        batch.begin();
+        // Draw the sprite with appropriate flipping
+        batch.draw(currentFrame, drawX, bounds.y, drawWidth, bounds.height);
+
+
+//        batch.end();
+//
+//        shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+//        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+//        shapeRenderer.setColor(Color.RED);
+//        shapeRenderer.rect(bounds.x, bounds.y, bounds.width, bounds.height);
+//        shapeRenderer.end();
+//
+//        batch.begin();
     }
 }

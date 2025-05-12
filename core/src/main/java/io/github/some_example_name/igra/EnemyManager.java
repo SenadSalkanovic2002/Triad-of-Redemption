@@ -22,9 +22,9 @@ public class EnemyManager {
         enemies.add(new Enemy(texture, damageSound, pickupSound, x, y));
     }
 
-    public void update(float delta) {
+    public void update(Player player, float delta) {
         for (Enemy enemy : enemies) {
-            enemy.update(delta);
+            enemy.update(player, delta);
         }
     }
 
