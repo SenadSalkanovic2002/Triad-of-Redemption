@@ -17,12 +17,14 @@ public abstract class BaseMap {
     protected String nextMapPath;
     protected boolean switchMap;
     protected final Player player;
+    protected EnemyManager enemyManager;
 
     protected float defaultZoom = 1f;
     protected boolean cameraTracksPlayer = true;
 
-    public BaseMap(String mapPath, Player player) {
+    public BaseMap(String mapPath, Player player, EnemyManager enemyManager) {
         this.player = player;
+        this.enemyManager = enemyManager;
         map = new TmxMapLoader().load(mapPath);
         renderer = new OrthogonalTiledMapRenderer(map);
 
@@ -38,6 +40,7 @@ public abstract class BaseMap {
             if (obj instanceof RectangleMapObject && "Start".equals(obj.getName())) {
                 Rectangle rect = ((RectangleMapObject) obj).getRectangle();
                 player.setPosition(rect.x, rect.y-100);// had to fix the spawn location, player spawned stuck inside the trees
+                enemyManager.addEnemy(rect.x, rect.y);
             }
         }
 
@@ -54,6 +57,7 @@ public abstract class BaseMap {
     public void update(float delta) {
         player.handleInput(delta);
         player.chooseAnimation(); // updates the current animation on every render, should be used in other maps as well
+        enemyManager.update(delta);
         if (checkTransition()) switchMap = true;
     }
 
@@ -82,6 +86,7 @@ public abstract class BaseMap {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         player.render(batch);
+        enemyManager.render(batch);
         font.draw(batch, "HEALTH: " + player.getHealth(), 10, 560);
         font.draw(batch, "SCORE: " + player.getScore(), 10, 540);
         if (player.isGameOver()) font.draw(batch, "GAME OVER", 400, 300);

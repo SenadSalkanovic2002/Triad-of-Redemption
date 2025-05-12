@@ -14,4 +14,11 @@ public class RegionNames {
     public static final String PLAYER_ATTACKING_UP = "atk_u";
     public static final String PLAYER_ATTACKING_ALTERNATIVE = "alt_atk";
 
+    public static final String ENEMY_IDLE = "skeleton_idle";
+    public static final String ENEMY_HURT = "skeleton_hurt";
+    public static final String ENEMY_WALKING = "skeleton_walk";
+    public static final String ENEMY_ATTACKING = "skeleton_attack";
+    public static final String ENEMY_DEAD = "skeleton_death";
+    public static final String ENEMY_JUMPING = "skeleton_jump";
+
 }

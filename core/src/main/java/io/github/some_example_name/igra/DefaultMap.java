@@ -3,8 +3,8 @@ package io.github.some_example_name.igra;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 
 public class DefaultMap extends BaseMap {
-    public DefaultMap(String mapPath, Player player) {
-        super(mapPath, player);
+    public DefaultMap(String mapPath, Player player, EnemyManager enemyManager) {
+        super(mapPath, player, enemyManager);
     }
 
     @Override
