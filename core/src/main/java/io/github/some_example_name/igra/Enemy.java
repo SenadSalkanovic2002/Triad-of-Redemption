@@ -153,7 +153,11 @@ public class Enemy {
         float drawWidth = isFacingLeft ? -bounds.width : bounds.width;
 
         // Draw the sprite with appropriate flipping
-        batch.draw(currentFrame, drawX, bounds.y, drawWidth, bounds.height);
+        //TODO: Pogledi zakaj to faila, če je več kot en enemy - Adrian, zaenkrat je workaround tale pogoj z null
+        if (currentFrame != null){
+            batch.draw(currentFrame, drawX, bounds.y, drawWidth, bounds.height);
+        }
+
 
 
 //        batch.end();
