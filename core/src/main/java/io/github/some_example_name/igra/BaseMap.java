@@ -27,6 +27,7 @@ public abstract class BaseMap {
         this.enemyManager = enemyManager;
         map = new TmxMapLoader().load(mapPath);
         renderer = new OrthogonalTiledMapRenderer(map);
+        player.setSmallerPlayer(false);
 
         switchMap = false;
         nextMapPath = null;

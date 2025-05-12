@@ -17,7 +17,7 @@ import com.badlogic.gdx.math.Rectangle;
 
 public class Player {
     private float x, y, speed;
-    private final Rectangle bounds;
+    private Rectangle bounds;
     private final TextureAtlas texture;
     private final Sound damageSound, pickupSound;
     private int health, score;
@@ -29,6 +29,7 @@ public class Player {
     private CharacterState currentState; // remembers what animation is currently being played
     private CharacterDirection lastDirection; // will be used for the attack directions
     private boolean isAttacking = false; // makes the animation play fully when space is pressed
+    private boolean isSmallerPlayer = false;
 
     private final ShapeRenderer shapeRenderer = new ShapeRenderer(); // debug thingy for the bounds rectangle
 
@@ -36,12 +37,12 @@ public class Player {
         this.texture = texture;
         this.damageSound = damageSound;
         this.pickupSound = pickupSound;
-        this.bounds = new Rectangle(0, 0, GameConfig.PLAYER_WIDTH, GameConfig.PLAYER_HEIGHT);
         this.speed = GameConfig.PLAYER_SPEED;
         this.health = GameConfig.PLAYER_HEALTH;
         this.score = 0;
         this.gameOver = false;
         this.gameWon = false;
+        changeBounds();
 
         idle = new Animation<TextureRegion>(
             GameConfig.PLAYER_ANIMATION_IDLE_DURATION,
@@ -117,7 +118,8 @@ public class Player {
 
 
     public void handleInput(float delta) {
-        if (currentState == CharacterState.ATTACKING) return; // don't allow movement while attacking
+        if (currentState == CharacterState.ATTACKING)
+            return; // don't allow movement while attacking
 
         //also updates the attack direction
         float dx = 0, dy = 0;
@@ -169,8 +171,8 @@ public class Player {
     }
 
     public void checkPickup(TiledMapTileLayer pickup, TiledMapTileLayer damage) {
-        int tileX = (int)(x / pickup.getTileWidth());
-        int tileY = (int)(y / pickup.getTileHeight());
+        int tileX = (int) (x / pickup.getTileWidth());
+        int tileY = (int) (y / pickup.getTileHeight());
 
         if (pickup.getCell(tileX, tileY) != null) {
             pickup.setCell(tileX, tileY, null);
@@ -200,7 +202,12 @@ public class Player {
 
     public void render(SpriteBatch batch) {
         animationTime += Gdx.graphics.getDeltaTime();
-        batch.draw(currentFrame, x-(bounds.width/2f), y-(bounds.height/2f));
+        if (isSmallerPlayer) {
+            batch.draw(currentFrame, x - (bounds.width), y - (bounds.height), currentFrame.getRegionWidth() / 2.3f, currentFrame.getRegionHeight() / 2.3f);
+        } else {
+            batch.draw(currentFrame, x - (bounds.width / 2f), y - (bounds.height / 2f));
+        }
+
         //debug rendering for the bounds rectangle
         batch.end();
 
@@ -215,18 +222,29 @@ public class Player {
 
     private float dx() {
         return Gdx.input.isKeyPressed(Input.Keys.A) ? -speed * Gdx.graphics.getDeltaTime() :
-            Gdx.input.isKeyPressed(Input.Keys.D) ?  speed * Gdx.graphics.getDeltaTime() : 0;
+            Gdx.input.isKeyPressed(Input.Keys.D) ? speed * Gdx.graphics.getDeltaTime() : 0;
     }
 
     private float dy() {
-        return Gdx.input.isKeyPressed(Input.Keys.W) ?  speed * Gdx.graphics.getDeltaTime() :
+        return Gdx.input.isKeyPressed(Input.Keys.W) ? speed * Gdx.graphics.getDeltaTime() :
             Gdx.input.isKeyPressed(Input.Keys.S) ? -speed * Gdx.graphics.getDeltaTime() : 0;
     }
 
-    public int getHealth() { return health; }
-    public int getScore() { return score; }
-    public boolean isGameOver() { return gameOver; }
-    public boolean isGameWon() { return gameWon; }
+    public int getHealth() {
+        return health;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public boolean isGameWon() {
+        return gameWon;
+    }
 
     public float getX() {
         return x;
@@ -234,6 +252,19 @@ public class Player {
 
     public float getY() {
         return y;
+    }
+
+    public void setSmallerPlayer(boolean smallerPlayer) {
+        isSmallerPlayer = smallerPlayer;
+        changeBounds();
+    }
+
+    public void changeBounds(){
+        if (isSmallerPlayer) {
+            this.bounds = new Rectangle(0, 0, GameConfig.PLAYER_WIDTH_SMALLER, GameConfig.PLAYER_HEIGHT_SMALLER);
+        } else {
+            this.bounds = new Rectangle(0, 0, GameConfig.PLAYER_WIDTH, GameConfig.PLAYER_HEIGHT);
+        }
     }
 
     public void chooseAnimation() {
@@ -280,8 +311,7 @@ public class Player {
                 }
                 break;
             }
-            case ATTACKING:
-            {
+            case ATTACKING: {
                 switch (lastDirection) {
                     case UP:
                         currentFrame = attackUp.getKeyFrame(animationTime, false);
@@ -305,8 +335,7 @@ public class Player {
                 }
                 break;
             }
-            default:
-            {
+            default: {
                 switch (lastDirection) {
                     case UP:
                         currentFrame = idleUp.getKeyFrame(animationTime, true);
