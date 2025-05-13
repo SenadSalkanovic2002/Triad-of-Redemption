@@ -42,7 +42,8 @@ public class Player {
         this.score = 0;
         this.gameOver = false;
         this.gameWon = false;
-        changeBounds();
+        setBoundsByTypeOfPlayer();
+        setSpeedByTypeOfPlayer();
 
         idle = new Animation<TextureRegion>(
             GameConfig.PLAYER_ANIMATION_IDLE_DURATION,
@@ -254,16 +255,25 @@ public class Player {
         return y;
     }
 
-    public void setSmallerPlayer(boolean smallerPlayer) {
-        isSmallerPlayer = smallerPlayer;
-        changeBounds();
+    public void setTypeOfPlayer(boolean isSmallerPlayer) {
+        this.isSmallerPlayer = isSmallerPlayer;
+        setBoundsByTypeOfPlayer();
+        setSpeedByTypeOfPlayer();
     }
 
-    public void changeBounds(){
+    public void setBoundsByTypeOfPlayer(){
         if (isSmallerPlayer) {
             this.bounds = new Rectangle(0, 0, GameConfig.PLAYER_WIDTH_SMALLER, GameConfig.PLAYER_HEIGHT_SMALLER);
         } else {
             this.bounds = new Rectangle(0, 0, GameConfig.PLAYER_WIDTH, GameConfig.PLAYER_HEIGHT);
+        }
+    }
+
+    public void setSpeedByTypeOfPlayer(){
+        if (isSmallerPlayer){
+            this.speed = GameConfig.PLAYER_SPEED_SMALLER;
+        } else {
+            this.speed = GameConfig.PLAYER_SPEED;
         }
     }
 

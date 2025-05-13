@@ -27,7 +27,7 @@ public abstract class BaseMap {
         this.enemyManager = enemyManager;
         map = new TmxMapLoader().load(mapPath);
         renderer = new OrthogonalTiledMapRenderer(map);
-        player.setSmallerPlayer(false);
+        player.setTypeOfPlayer(false);
 
         switchMap = false;
         nextMapPath = null;
@@ -77,6 +77,10 @@ public abstract class BaseMap {
             }
         }
         return false;
+    }
+
+    public void setDefaultZoom(float defaultZoom) {
+        this.defaultZoom = defaultZoom;
     }
 
     public void render(OrthographicCamera camera, SpriteBatch batch, BitmapFont font) {
