@@ -255,7 +255,7 @@ public class Player {
         return y;
     }
 
-    public void setTypeOfPlayer(boolean isSmallerPlayer) {
+    public void setIfSmallerPlayer(boolean isSmallerPlayer) {
         this.isSmallerPlayer = isSmallerPlayer;
         setBoundsByTypeOfPlayer();
         setSpeedByTypeOfPlayer();

@@ -21,13 +21,21 @@ public abstract class BaseMap {
 
     protected float defaultZoom = 1f;
     protected boolean cameraTracksPlayer = true;
+    protected boolean isSmallerScale = false;
 
-    public BaseMap(String mapPath, Player player, EnemyManager enemyManager) {
+    public BaseMap(String mapPath, Player player, EnemyManager enemyManager, boolean isSmallerScale) {
         this.player = player;
         this.enemyManager = enemyManager;
+        this.isSmallerScale = isSmallerScale;
         map = new TmxMapLoader().load(mapPath);
         renderer = new OrthogonalTiledMapRenderer(map);
-        player.setTypeOfPlayer(false);
+
+        if (isSmallerScale){
+            player.setIfSmallerPlayer(true);
+            setDefaultZoom(0.4f);
+        } else {
+            player.setIfSmallerPlayer(false);
+        }
 
         switchMap = false;
         nextMapPath = null;
@@ -86,6 +94,10 @@ public abstract class BaseMap {
         this.defaultZoom = defaultZoom;
     }
 
+    public boolean isSmallerScale() {
+        return isSmallerScale;
+    }
+
     public void render(OrthographicCamera camera, SpriteBatch batch, BitmapFont font) {
         camera.update();
         renderer.setView(camera);
@@ -95,8 +107,26 @@ public abstract class BaseMap {
         batch.begin();
         player.render(batch);
         enemyManager.render(batch);
-        font.draw(batch, "HEALTH: " + player.getHealth(), 10, 560);
-        font.draw(batch, "SCORE: " + player.getScore(), 10, 540);
+
+        float fontX = camera.position.x - camera.viewportWidth / (2 / camera.zoom);
+        float fontYHealth = camera.position.y - camera.viewportHeight / (2 / camera.zoom);
+        float fontYScore = fontYHealth;
+
+        if (isSmallerScale){
+            fontX += 5;
+            fontYScore += 20;
+            fontYHealth += 30;
+        } else {
+            fontX += 10;
+            fontYScore += 40;
+            fontYHealth += 60;
+        }
+
+
+
+        font.draw(batch, "HEALTH: " + player.getHealth(), fontX, fontYHealth);
+        font.draw(batch, "SCORE: " + player.getScore(),  fontX, fontYScore);
+
         if (player.isGameOver()) font.draw(batch, "GAME OVER", 400, 300);
         else if (player.isGameWon()) font.draw(batch, "YOU WIN!", 400, 300);
         batch.end();
