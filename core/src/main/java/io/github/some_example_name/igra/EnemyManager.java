@@ -11,6 +11,7 @@ public class EnemyManager {
     private final List<Enemy> enemies = new ArrayList<>();
     private final TextureAtlas texture;
     private final Sound damageSound, pickupSound;
+    private BaseMap currentMap;
 
     public EnemyManager(TextureAtlas texture, Sound damageSound, Sound pickupSound) {
         this.texture = texture;
@@ -18,8 +19,19 @@ public class EnemyManager {
         this.pickupSound = pickupSound;
     }
 
+    public void setMap(BaseMap map) {
+        this.currentMap = map;
+        for (Enemy enemy : enemies) {
+            enemy.setMap(map);
+        }
+    }
+
     public void addEnemy(float x, float y) {
-        enemies.add(new Enemy(texture, damageSound, pickupSound, x, y));
+        Enemy enemy = new Enemy(texture, damageSound, pickupSound, x, y);
+        if (currentMap != null) {
+            enemy.setMap(currentMap);
+        }
+        enemies.add(enemy);
     }
 
     public void update(Player player, float delta) {

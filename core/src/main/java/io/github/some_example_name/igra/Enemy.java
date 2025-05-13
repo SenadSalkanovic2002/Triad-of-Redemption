@@ -7,10 +7,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Enemy {
     private float x, y, speed;
+    private float lastMoveX, lastMoveY; // Store last movement for collision resolution
     private final Rectangle bounds;
     private final TextureAtlas texture;
     private final Sound damageSound, pickupSound;
@@ -90,6 +94,70 @@ public class Enemy {
     public void setMap(BaseMap map) {
         this.map = map;
     }
+    private void moveWithCollision(float dx, float dy) {
+        lastMoveX = dx;
+        lastMoveY = dy;
+
+        // Try moving in both directions separately
+        boolean canMoveX = true;
+        boolean canMoveY = true;
+
+        // Try X movement
+        x += dx;
+        bounds.setPosition(x, y);
+        if (checkCollision(map.collisions)) {
+            x -= dx; // Revert X movement
+            bounds.setPosition(x, y);
+            canMoveX = false;
+        }
+
+        // Try Y movement
+        y += dy;
+        bounds.setPosition(x, y);
+        if (checkCollision(map.collisions)) {
+            y -= dy; // Revert Y movement
+            bounds.setPosition(x, y);
+            canMoveY = false;
+        }
+
+        // If either movement is blocked, try to slide with increased speed
+        if (!canMoveX || !canMoveY) {
+
+            if (!canMoveX && Math.abs(dy) > 0.01f) {
+                // If X is blocked, try enhanced Y movement
+                y += dy;
+                bounds.setPosition(x, y);
+                if (checkCollision(map.collisions)) {
+                    y -= dy;
+                    bounds.setPosition(x, y);
+                }
+            }
+
+            if (!canMoveY && Math.abs(dx) > 0.01f) {
+                // If Y is blocked, try enhanced X movement
+                x += dx;
+                bounds.setPosition(x, y);
+                if (checkCollision(map.collisions)) {
+                    x -= dx;
+                    bounds.setPosition(x, y);
+                }
+            }
+        }
+
+        bounds.setPosition(x, y);
+    }
+
+    private boolean checkCollision(MapObjects objects) {
+        for (MapObject obj : objects) {
+            if (obj instanceof RectangleMapObject) {
+                Rectangle rect = ((RectangleMapObject) obj).getRectangle();
+                if (bounds.overlaps(rect)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     public void update(Player player, float delta) {
         animationTime += delta;
@@ -113,9 +181,10 @@ public class Enemy {
 
                 isFacingLeft = directionX < 0;
 
-                // Move toward player
-                x += directionX * GameConfig.ENEMY_SPEED * delta;
-                y += directionY * GameConfig.ENEMY_SPEED * delta;
+                // Move toward player with collision checking
+                float moveX = directionX * GameConfig.ENEMY_SPEED * delta;
+                float moveY = directionY * GameConfig.ENEMY_SPEED * delta;
+                moveWithCollision(moveX, moveY);
 
                 currentState = CharacterState.WALKING;
             } else { // Close enough to attack
@@ -126,7 +195,7 @@ public class Enemy {
             currentState = CharacterState.IDLE;
         }
 
-        // Set the current frame based on the state
+        // Update animation frame
         switch (currentState) {
             case IDLE:
                 currentFrame = idle.getKeyFrame(animationTime);
@@ -140,9 +209,6 @@ public class Enemy {
             default:
                 currentFrame = idle.getKeyFrame(animationTime);
         }
-
-        // Update collision bounds
-        bounds.setPosition(x, y);
     }
 
     public void render(SpriteBatch batch) {

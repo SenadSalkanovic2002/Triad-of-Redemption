@@ -36,6 +36,9 @@ public abstract class BaseMap {
         bridges = getLayerObjects("bridgee");
         nextMapTriggers = getLayerObjects("next_map");
 
+        player.setMap(this);
+        enemyManager.setMap(this);
+
         for (MapObject obj : map.getLayers().get("start").getObjects()) {
             if (obj instanceof RectangleMapObject && "Start".equals(obj.getName())) {
                 Rectangle rect = ((RectangleMapObject) obj).getRectangle();
