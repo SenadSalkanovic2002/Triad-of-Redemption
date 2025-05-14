@@ -4,6 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -30,6 +33,7 @@ public class Player {
     private CharacterDirection lastDirection; // will be used for the attack directions
     private boolean isAttacking = false; // makes the animation play fully when space is pressed
     private boolean isSmallerPlayer = false;
+    private Texture visionMask;
 
     private final ShapeRenderer shapeRenderer = new ShapeRenderer(); // debug thingy for the bounds rectangle
 
@@ -98,6 +102,8 @@ public class Player {
             Animation.PlayMode.NORMAL
         );
 
+        generateVisionMask(550);
+
         currentState = CharacterState.IDLE;
         lastDirection = CharacterDirection.RIGHT;
         animationTime = 0f;
@@ -161,6 +167,18 @@ public class Player {
         }
     }
 
+    public void checkTrap(MapObjects traps) {
+        for (MapObject obj : traps) {
+            if (obj instanceof RectangleMapObject) {
+                Rectangle rect = ((RectangleMapObject) obj).getRectangle();
+                if (bounds.overlaps(rect)) {
+                    this.health -= 10;
+                    return;
+                }
+            }
+        }
+    }
+
     public void checkEnd(MapObjects endObjects) {
         for (MapObject obj : endObjects) {
             if (obj instanceof RectangleMapObject) {
@@ -201,25 +219,77 @@ public class Player {
         }
     }
 
-    public void render(SpriteBatch batch) {
-        animationTime += Gdx.graphics.getDeltaTime();
-        if (isSmallerPlayer) {
-            batch.draw(currentFrame, x - (bounds.width), y - (bounds.height), currentFrame.getRegionWidth() / 2.3f, currentFrame.getRegionHeight() / 2.3f);
-        } else {
-            batch.draw(currentFrame, x - (bounds.width / 2f), y - (bounds.height / 2f));
+    private void generateVisionMask(int diameter) {
+        Pixmap pixmap = new Pixmap(diameter, diameter, Pixmap.Format.RGBA8888);
+        int radius = diameter / 2;
+
+        for (int y = 0; y < diameter; y++) {
+            for (int x = 0; x < diameter; x++) {
+                float dx = x - radius;
+                float dy = y - radius;
+                float dist = (float) Math.sqrt(dx * dx + dy * dy);
+                float alpha = Math.min(1f, dist / radius);
+                alpha = alpha * alpha;
+                // Z tem lahko nastavljas črnobo okoli igralca npr. manjsi krog bolj temen Math.min(1f, alpha * 10f)
+                pixmap.setColor(0f, 0f, 0f, Math.min(0.91f, alpha * 5f));
+                pixmap.drawPixel(x, y);
+            }
         }
 
-        //debug rendering for the bounds rectangle
+        visionMask = new Texture(pixmap);
+        pixmap.dispose();
+    }
+
+    public void render(SpriteBatch batch) {
+        animationTime += Gdx.graphics.getDeltaTime();
+
+        if (isSmallerPlayer) {
+            batch.draw(
+                currentFrame,
+                x - bounds.width,
+                y - bounds.height,
+                currentFrame.getRegionWidth() / 2.3f,
+                currentFrame.getRegionHeight() / 2.3f
+            );
+        } else {
+            batch.draw(
+                currentFrame,
+                x - (bounds.width / 2f),
+                y - (bounds.height / 2f)
+            );
+        }
+
         batch.end();
 
+        // Debug rectangle
         shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(Color.RED);
         shapeRenderer.rect(bounds.x, bounds.y, bounds.width, bounds.height);
         shapeRenderer.end();
 
+        if (isSmallerPlayer && visionMask != null) {
+            float maskSize = visionMask.getWidth();
+            float centerX = x + bounds.width / 2f;
+            float centerY = y + bounds.height / 2f;
+
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+            batch.begin();
+            batch.draw(
+                visionMask,
+                centerX - maskSize / 2f,
+                centerY - maskSize / 2f
+            );
+            batch.end();
+
+            Gdx.gl.glDisable(GL20.GL_BLEND);
+        }
+
         batch.begin();
     }
+
 
     private float dx() {
         return Gdx.input.isKeyPressed(Input.Keys.A) ? -speed * Gdx.graphics.getDeltaTime() :
@@ -261,7 +331,7 @@ public class Player {
         setSpeedByTypeOfPlayer();
     }
 
-    public void setBoundsByTypeOfPlayer(){
+    public void setBoundsByTypeOfPlayer() {
         if (isSmallerPlayer) {
             this.bounds = new Rectangle(0, 0, GameConfig.PLAYER_WIDTH_SMALLER, GameConfig.PLAYER_HEIGHT_SMALLER);
         } else {
@@ -269,8 +339,8 @@ public class Player {
         }
     }
 
-    public void setSpeedByTypeOfPlayer(){
-        if (isSmallerPlayer){
+    public void setSpeedByTypeOfPlayer() {
+        if (isSmallerPlayer) {
             this.speed = GameConfig.PLAYER_SPEED_SMALLER;
         } else {
             this.speed = GameConfig.PLAYER_SPEED;

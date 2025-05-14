@@ -12,8 +12,8 @@ import com.badlogic.gdx.math.Rectangle;
 public abstract class BaseMap {
     protected TiledMap map;
     protected OrthogonalTiledMapRenderer renderer;
-    protected MapObjects collisions, endZones, bridges, nextMapTriggers;
-    protected TiledMapTileLayer pickupLayer, damageLayer;
+    protected MapObjects collisions, endZones, bridges, nextMapTriggers, traps;
+    protected TiledMapTileLayer pickupLayer, damageLayer, trapLayer;
     protected String nextMapPath;
     protected boolean switchMap;
     protected final Player player;
@@ -30,7 +30,7 @@ public abstract class BaseMap {
         map = new TmxMapLoader().load(mapPath);
         renderer = new OrthogonalTiledMapRenderer(map);
 
-        if (isSmallerScale){
+        if (isSmallerScale) {
             player.setIfSmallerPlayer(true);
             setDefaultZoom(0.4f);
         } else {
@@ -41,6 +41,7 @@ public abstract class BaseMap {
         nextMapPath = null;
 
         collisions = getLayerObjects("wall");
+        traps = getLayerObjects("traps");
         endZones = getLayerObjects("end");
         bridges = getLayerObjects("bridgee");
         nextMapTriggers = getLayerObjects("next_map");
@@ -51,7 +52,7 @@ public abstract class BaseMap {
         for (MapObject obj : map.getLayers().get("start").getObjects()) {
             if (obj instanceof RectangleMapObject && "Start".equals(obj.getName())) {
                 Rectangle rect = ((RectangleMapObject) obj).getRectangle();
-                player.setPosition(rect.x, rect.y-100);// had to fix the spawn location, player spawned stuck inside the trees
+                player.setPosition(rect.x, rect.y - 100);// had to fix the spawn location, player spawned stuck inside the trees
                 enemyManager.addEnemy(rect.x, rect.y);
             }
         }
@@ -112,7 +113,7 @@ public abstract class BaseMap {
         float fontYHealth = camera.position.y - camera.viewportHeight / (2 / camera.zoom);
         float fontYScore = fontYHealth;
 
-        if (isSmallerScale){
+        if (isSmallerScale) {
             fontX += 5;
             fontYScore += 20;
             fontYHealth += 30;
@@ -123,15 +124,15 @@ public abstract class BaseMap {
         }
 
 
-
         font.draw(batch, "HEALTH: " + player.getHealth(), fontX, fontYHealth);
-        font.draw(batch, "SCORE: " + player.getScore(),  fontX, fontYScore);
+        font.draw(batch, "SCORE: " + player.getScore(), fontX, fontYScore);
 
         if (player.isGameOver()) font.draw(batch, "GAME OVER", 400, 300);
         else if (player.isGameWon()) font.draw(batch, "YOU WIN!", 400, 300);
         batch.end();
 
         player.checkCollisions(collisions);
+        player.checkTrap(traps);
         player.checkEnd(endZones);
         player.checkBridge(bridges);
     }
