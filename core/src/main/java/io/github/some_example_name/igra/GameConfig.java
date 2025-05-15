@@ -5,8 +5,11 @@ public class GameConfig {
     // Player
     public static final int PLAYER_WIDTH = 96;
     public static final int PLAYER_HEIGHT = 96;
+    public static final int PLAYER_WIDTH_SMALLER = 28;
+    public static final int PLAYER_HEIGHT_SMALLER = 28;
 
     public static final float PLAYER_SPEED = 200f; // Speed of the player
+    public static final float PLAYER_SPEED_SMALLER = 100f; // Speed of the player
     public static final float PLAYER_DAMAGE = 10.0f; // Damage dealt by the player
     public static final int PLAYER_HEALTH = 100; // Health of the player
 
