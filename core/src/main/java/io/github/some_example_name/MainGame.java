@@ -8,9 +8,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
-import io.github.some_example_name.igra.BaseMap;
-import io.github.some_example_name.igra.MapFactory;
-import io.github.some_example_name.igra.Player;
+import io.github.some_example_name.igra.*;
 
 public class MainGame extends ApplicationAdapter {
     private OrthographicCamera camera;
@@ -20,6 +18,8 @@ public class MainGame extends ApplicationAdapter {
     private BitmapFont font;
     private Player player;
     private BaseMap currentMap;
+    private EnemyManager enemyManager;
+    private TextureAtlas enemyTexture;
 
     @Override
     public void create() {
@@ -29,11 +29,13 @@ public class MainGame extends ApplicationAdapter {
         font = new BitmapFont();
 
         playerTexture = new TextureAtlas("assets/player.txt");
+        enemyTexture = new TextureAtlas("assets/enemy.txt");
         damageSound = Gdx.audio.newSound(Gdx.files.internal("tiled/hit.mp3"));
         pickupSound = Gdx.audio.newSound(Gdx.files.internal("tiled/pickup.mp3"));
 
         player = new Player(playerTexture, damageSound, pickupSound);
-        currentMap = MapFactory.createMap("tiled/starting.tmx", player);
+        enemyManager = new EnemyManager(enemyTexture, damageSound, pickupSound);
+        currentMap = MapFactory.createMap("tiled/starting.tmx", player, enemyManager);
         camera.zoom = currentMap.getDefaultZoom();
         player.setMap(currentMap);
     }
@@ -44,7 +46,7 @@ public class MainGame extends ApplicationAdapter {
 
         if (currentMap.shouldSwitchMap()) {
             currentMap.dispose();
-            currentMap = MapFactory.createMap(currentMap.getNextMapPath(), player);
+            currentMap = MapFactory.createMap(currentMap.getNextMapPath(), player, enemyManager);
             player.setMap(currentMap);
             camera.zoom = currentMap.getDefaultZoom();
         }
@@ -65,5 +67,6 @@ public class MainGame extends ApplicationAdapter {
         pickupSound.dispose();
         font.dispose();
         currentMap.dispose();
+        enemyTexture.dispose();
     }
 }
