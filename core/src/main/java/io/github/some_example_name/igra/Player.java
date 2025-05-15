@@ -34,6 +34,7 @@ public class Player {
     private boolean isAttacking = false; // makes the animation play fully when space is pressed
     private boolean isSmallerPlayer = false;
     private Texture visionMask;
+    private Rectangle attackHitbox; // Hitbox rectangle, is exposed with a method to check for collision with enemies
 
     private final ShapeRenderer shapeRenderer = new ShapeRenderer(); // debug thingy for the bounds rectangle
 
@@ -266,6 +267,11 @@ public class Player {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(Color.RED);
         shapeRenderer.rect(bounds.x, bounds.y, bounds.width, bounds.height);
+
+        if (isAttacking && attackHitbox != null) { // Draws the attack hitbox
+            shapeRenderer.rect(attackHitbox.x, attackHitbox.y, attackHitbox.width, attackHitbox.height);
+        }
+
         shapeRenderer.end();
 
         if (isSmallerPlayer && visionMask != null) {
@@ -392,6 +398,7 @@ public class Player {
                 break;
             }
             case ATTACKING: {
+                this.attack();
                 switch (lastDirection) {
                     case UP:
                         currentFrame = attackUp.getKeyFrame(animationTime, false);
@@ -412,6 +419,7 @@ public class Player {
                     isAttacking = false;
                     currentState = CharacterState.IDLE;
                     animationTime = 0;
+                    attackHitbox = null;
                 }
                 break;
             }
@@ -435,5 +443,59 @@ public class Player {
                 break;
             }
         }
+    }
+
+    // Creates the rectangle for the attack hitbox, is called every frame while the attack is happening
+    private void attack() {
+        float hitboxWidth = bounds.getWidth() / 2f;
+        float hitboxHeight = bounds.getHeight() / 2f;
+        float hitboxX = x;
+        float hitboxY = y;
+
+        switch (lastDirection) {
+            case LEFT:
+                hitboxHeight = bounds.getHeight();
+                if(isSmallerPlayer) {
+                    hitboxHeight *= 1.5f;
+                    hitboxWidth *= 1.5f;
+                    hitboxY -= bounds.getHeight() * 0.25f;
+                }
+                hitboxX -= hitboxWidth;
+                break;
+            case RIGHT:
+                hitboxHeight = bounds.getHeight();
+                if(isSmallerPlayer) {
+                    hitboxHeight *= 1.5f;
+                    hitboxWidth *= 1.5f;
+                    hitboxY -= bounds.getHeight() * 0.25f;
+                }
+                hitboxX += bounds.getWidth();
+                break;
+            case UP:
+                hitboxWidth = bounds.getWidth();
+                if(isSmallerPlayer) {
+                    hitboxHeight *= 1.5f;
+                    hitboxWidth *= 1.5f;
+                    hitboxX -= bounds.getWidth() * 0.25f;
+                }
+                hitboxY += bounds.getHeight();
+                break;
+            case DOWN:
+                hitboxWidth = bounds.getWidth();
+                if(isSmallerPlayer) {
+                    hitboxHeight *= 1.5f;
+                    hitboxWidth *= 1.5f;
+                    hitboxX -= bounds.getWidth() * 0.25f;
+                }
+                hitboxY -= hitboxHeight;
+                break;
+        }
+
+        attackHitbox = new Rectangle(hitboxX, hitboxY, hitboxWidth, hitboxHeight);
+    }
+
+    // Will be used to return the hitbox to check if the player has successfully hit an enemy
+    public Rectangle getAttackHitbox() {
+        return isAttacking ? attackHitbox : null;
     }
 }
