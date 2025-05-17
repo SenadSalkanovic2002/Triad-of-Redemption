@@ -8,11 +8,13 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import java.util.Date;
 
 public abstract class BaseMap {
     protected TiledMap map;
     protected OrthogonalTiledMapRenderer renderer;
     protected MapObjects collisions, endZones, bridges, nextMapTriggers, traps;
+    protected MapProperties tmp;
     protected TiledMapTileLayer pickupLayer, damageLayer, trapLayer;
     protected String nextMapPath;
     protected boolean switchMap;
@@ -22,13 +24,16 @@ public abstract class BaseMap {
     protected float defaultZoom = 1f;
     protected boolean cameraTracksPlayer = true;
     protected boolean isSmallerScale = false;
+    protected long timeOfLoad = 0; // In milliseconds
 
     public BaseMap(String mapPath, Player player, EnemyManager enemyManager, boolean isSmallerScale) {
         this.player = player;
         this.enemyManager = enemyManager;
         this.isSmallerScale = isSmallerScale;
+        timeOfLoad = new Date().getTime();
         map = new TmxMapLoader().load(mapPath);
         renderer = new OrthogonalTiledMapRenderer(map);
+
 
         if (isSmallerScale) {
             player.setIfSmallerPlayer(true);
@@ -56,7 +61,6 @@ public abstract class BaseMap {
                 enemyManager.addEnemy(rect.x, rect.y);
             }
         }
-
         setupAdditionalLayers();
     }
 
@@ -132,7 +136,7 @@ public abstract class BaseMap {
         batch.end();
 
         player.checkCollisions(collisions);
-        player.checkTrap(traps);
+        player.checkTrap(traps, timeSinceLoad());
         player.checkEnd(endZones);
         player.checkBridge(bridges);
     }
@@ -147,6 +151,9 @@ public abstract class BaseMap {
 
     public float getDefaultZoom() {
         return defaultZoom;
+    }
+    public long timeSinceLoad(){
+        return new Date().getTime() - timeOfLoad;
     }
 
     public boolean shouldCameraTrackPlayer() {

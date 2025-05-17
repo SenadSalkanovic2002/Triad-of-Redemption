@@ -167,11 +167,11 @@ public class Player {
         }
     }
 
-    public void checkTrap(MapObjects traps) {
+    public void checkTrap(MapObjects traps, long timeSinceLoad) {
         for (MapObject obj : traps) {
             if (obj instanceof RectangleMapObject) {
                 Rectangle rect = ((RectangleMapObject) obj).getRectangle();
-                if (bounds.overlaps(rect)) {
+                if (bounds.overlaps(rect) && timeSinceLoad % 2800 >= 2780) {
                     this.health -= 10;
                     return;
                 }
