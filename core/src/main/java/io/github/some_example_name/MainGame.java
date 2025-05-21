@@ -16,10 +16,19 @@ public class MainGame extends ApplicationAdapter {
     private TextureAtlas playerTexture;
     private Sound damageSound, pickupSound;
     private BitmapFont font;
+    private BitmapFont fontSmaller;
     private Player player;
     private BaseMap currentMap;
     private EnemyManager enemyManager;
     private TextureAtlas enemyTexture;
+
+    public BitmapFont getFont() {
+        return font;
+    }
+
+    public BitmapFont getFontSmaller() {
+        return fontSmaller;
+    }
 
     @Override
     public void create() {
@@ -27,6 +36,8 @@ public class MainGame extends ApplicationAdapter {
         camera.setToOrtho(false, 1280, 720);
         batch = new SpriteBatch();
         font = new BitmapFont();
+        fontSmaller = new BitmapFont(Gdx.files.internal("assets/lsans-small.fnt"),
+            Gdx.files.internal("assets/lsans-small.png"), false);
 
         playerTexture = new TextureAtlas("assets/player.txt");
         enemyTexture = new TextureAtlas("assets/enemy.txt");
@@ -56,7 +67,12 @@ public class MainGame extends ApplicationAdapter {
         }
 
         camera.update();
-        currentMap.render(camera, batch, font);
+        if (currentMap.isSmallerScale()){
+            currentMap.render(camera, batch, fontSmaller);
+        } else {
+            currentMap.render(camera, batch, font);
+        }
+
     }
 
     @Override
@@ -66,6 +82,7 @@ public class MainGame extends ApplicationAdapter {
         damageSound.dispose();
         pickupSound.dispose();
         font.dispose();
+        fontSmaller.dispose();
         currentMap.dispose();
         enemyTexture.dispose();
     }

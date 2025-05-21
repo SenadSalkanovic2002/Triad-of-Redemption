@@ -4,6 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -17,7 +20,7 @@ import com.badlogic.gdx.math.Rectangle;
 
 public class Player {
     private float x, y, speed;
-    private final Rectangle bounds;
+    private Rectangle bounds;
     private final TextureAtlas texture;
     private final Sound damageSound, pickupSound;
     private int health, score;
@@ -29,6 +32,8 @@ public class Player {
     private CharacterState currentState; // remembers what animation is currently being played
     private CharacterDirection lastDirection; // will be used for the attack directions
     private boolean isAttacking = false; // makes the animation play fully when space is pressed
+    private boolean isSmallerPlayer = false;
+    private Texture visionMask;
 
     private final ShapeRenderer shapeRenderer = new ShapeRenderer(); // debug thingy for the bounds rectangle
 
@@ -36,12 +41,13 @@ public class Player {
         this.texture = texture;
         this.damageSound = damageSound;
         this.pickupSound = pickupSound;
-        this.bounds = new Rectangle(0, 0, GameConfig.PLAYER_WIDTH, GameConfig.PLAYER_HEIGHT);
         this.speed = GameConfig.PLAYER_SPEED;
         this.health = GameConfig.PLAYER_HEALTH;
         this.score = 0;
         this.gameOver = false;
         this.gameWon = false;
+        setBoundsByTypeOfPlayer();
+        setSpeedByTypeOfPlayer();
 
         idle = new Animation<TextureRegion>(
             GameConfig.PLAYER_ANIMATION_IDLE_DURATION,
@@ -96,6 +102,8 @@ public class Player {
             Animation.PlayMode.NORMAL
         );
 
+        generateVisionMask(550);
+
         currentState = CharacterState.IDLE;
         lastDirection = CharacterDirection.RIGHT;
         animationTime = 0f;
@@ -117,7 +125,8 @@ public class Player {
 
 
     public void handleInput(float delta) {
-        if (currentState == CharacterState.ATTACKING) return; // don't allow movement while attacking
+        if (currentState == CharacterState.ATTACKING)
+            return; // don't allow movement while attacking
 
         //also updates the attack direction
         float dx = 0, dy = 0;
@@ -144,6 +153,30 @@ public class Player {
         bounds.setPosition(x, y);
     }
 
+    public void attackEnemies(EnemyManager enemyManager) {
+        if (currentState == CharacterState.ATTACKING) {
+            for (Enemy enemy : enemyManager.getEnemies()) {
+                if (bounds.overlaps(enemy.getBounds())) {
+                    enemy.takeDamage((int) GameConfig.PLAYER_DAMAGE);
+                }
+            }
+        }
+
+        // Reset the attack state when the animation ends
+        if (attackSide.isAnimationFinished(animationTime)) {
+            isAttacking = false;
+            currentState = CharacterState.IDLE;
+            animationTime = 0;
+        }
+    }
+
+    public void takeDamage(int damage) {
+        this.health -= damage;
+        if (health <= 0) {
+            gameOver = true;
+        }
+    }
+
     public void checkCollisions(MapObjects objects) {
         for (MapObject obj : objects) {
             if (obj instanceof RectangleMapObject) {
@@ -152,6 +185,18 @@ public class Player {
                     x -= dx();
                     y -= dy();
                     bounds.setPosition(x, y);
+                    return;
+                }
+            }
+        }
+    }
+
+    public void checkTrap(MapObjects traps) {
+        for (MapObject obj : traps) {
+            if (obj instanceof RectangleMapObject) {
+                Rectangle rect = ((RectangleMapObject) obj).getRectangle();
+                if (bounds.overlaps(rect)) {
+                    this.health -= 10;
                     return;
                 }
             }
@@ -169,8 +214,8 @@ public class Player {
     }
 
     public void checkPickup(TiledMapTileLayer pickup, TiledMapTileLayer damage) {
-        int tileX = (int)(x / pickup.getTileWidth());
-        int tileY = (int)(y / pickup.getTileHeight());
+        int tileX = (int) (x / pickup.getTileWidth());
+        int tileY = (int) (y / pickup.getTileHeight());
 
         if (pickup.getCell(tileX, tileY) != null) {
             pickup.setCell(tileX, tileY, null);
@@ -198,35 +243,103 @@ public class Player {
         }
     }
 
+    private void generateVisionMask(int diameter) {
+        Pixmap pixmap = new Pixmap(diameter, diameter, Pixmap.Format.RGBA8888);
+        int radius = diameter / 2;
+
+        for (int y = 0; y < diameter; y++) {
+            for (int x = 0; x < diameter; x++) {
+                float dx = x - radius;
+                float dy = y - radius;
+                float dist = (float) Math.sqrt(dx * dx + dy * dy);
+                float alpha = Math.min(1f, dist / radius);
+                alpha = alpha * alpha;
+                // Z tem lahko nastavljas črnobo okoli igralca npr. manjsi krog bolj temen Math.min(1f, alpha * 10f)
+                pixmap.setColor(0f, 0f, 0f, Math.min(0.91f, alpha * 5f));
+                pixmap.drawPixel(x, y);
+            }
+        }
+
+        visionMask = new Texture(pixmap);
+        pixmap.dispose();
+    }
+
     public void render(SpriteBatch batch) {
         animationTime += Gdx.graphics.getDeltaTime();
-        batch.draw(currentFrame, x-(bounds.width/2f), y-(bounds.height/2f));
-        //debug rendering for the bounds rectangle
+
+        if (isSmallerPlayer) {
+            batch.draw(
+                currentFrame,
+                x - bounds.width,
+                y - bounds.height,
+                currentFrame.getRegionWidth() / 2.3f,
+                currentFrame.getRegionHeight() / 2.3f
+            );
+        } else {
+            batch.draw(
+                currentFrame,
+                x - (bounds.width / 2f),
+                y - (bounds.height / 2f)
+            );
+        }
+
         batch.end();
 
+        // Debug rectangle
         shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(Color.RED);
         shapeRenderer.rect(bounds.x, bounds.y, bounds.width, bounds.height);
         shapeRenderer.end();
 
+        if (isSmallerPlayer && visionMask != null) {
+            float maskSize = visionMask.getWidth();
+            float centerX = x + bounds.width / 2f;
+            float centerY = y + bounds.height / 2f;
+
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+            batch.begin();
+            batch.draw(
+                visionMask,
+                centerX - maskSize / 2f,
+                centerY - maskSize / 2f
+            );
+            batch.end();
+
+            Gdx.gl.glDisable(GL20.GL_BLEND);
+        }
+
         batch.begin();
     }
 
+
     private float dx() {
         return Gdx.input.isKeyPressed(Input.Keys.A) ? -speed * Gdx.graphics.getDeltaTime() :
-            Gdx.input.isKeyPressed(Input.Keys.D) ?  speed * Gdx.graphics.getDeltaTime() : 0;
+            Gdx.input.isKeyPressed(Input.Keys.D) ? speed * Gdx.graphics.getDeltaTime() : 0;
     }
 
     private float dy() {
-        return Gdx.input.isKeyPressed(Input.Keys.W) ?  speed * Gdx.graphics.getDeltaTime() :
+        return Gdx.input.isKeyPressed(Input.Keys.W) ? speed * Gdx.graphics.getDeltaTime() :
             Gdx.input.isKeyPressed(Input.Keys.S) ? -speed * Gdx.graphics.getDeltaTime() : 0;
     }
 
-    public int getHealth() { return health; }
-    public int getScore() { return score; }
-    public boolean isGameOver() { return gameOver; }
-    public boolean isGameWon() { return gameWon; }
+    public int getHealth() {
+        return health;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public boolean isGameWon() {
+        return gameWon;
+    }
 
     public float getX() {
         return x;
@@ -236,7 +349,29 @@ public class Player {
         return y;
     }
 
-    public void chooseAnimation() {
+    public void setIfSmallerPlayer(boolean isSmallerPlayer) {
+        this.isSmallerPlayer = isSmallerPlayer;
+        setBoundsByTypeOfPlayer();
+        setSpeedByTypeOfPlayer();
+    }
+
+    public void setBoundsByTypeOfPlayer() {
+        if (isSmallerPlayer) {
+            this.bounds = new Rectangle(0, 0, GameConfig.PLAYER_WIDTH_SMALLER, GameConfig.PLAYER_HEIGHT_SMALLER);
+        } else {
+            this.bounds = new Rectangle(0, 0, GameConfig.PLAYER_WIDTH, GameConfig.PLAYER_HEIGHT);
+        }
+    }
+
+    public void setSpeedByTypeOfPlayer() {
+        if (isSmallerPlayer) {
+            this.speed = GameConfig.PLAYER_SPEED_SMALLER;
+        } else {
+            this.speed = GameConfig.PLAYER_SPEED;
+        }
+    }
+
+    public void chooseAnimation(EnemyManager enemyManager) {
         boolean isMoving = Gdx.input.isKeyPressed(Input.Keys.W) ||
             Gdx.input.isKeyPressed(Input.Keys.A) ||
             Gdx.input.isKeyPressed(Input.Keys.S) ||
@@ -247,6 +382,7 @@ public class Player {
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE) || isAttacking) {
             newState = CharacterState.ATTACKING;
             isAttacking = true;
+            attackEnemies(enemyManager);
         } else if (isMoving) {
             newState = CharacterState.WALKING;
         } else {
@@ -280,8 +416,7 @@ public class Player {
                 }
                 break;
             }
-            case ATTACKING:
-            {
+            case ATTACKING: {
                 switch (lastDirection) {
                     case UP:
                         currentFrame = attackUp.getKeyFrame(animationTime, false);
@@ -305,8 +440,7 @@ public class Player {
                 }
                 break;
             }
-            default:
-            {
+            default: {
                 switch (lastDirection) {
                     case UP:
                         currentFrame = idleUp.getKeyFrame(animationTime, true);

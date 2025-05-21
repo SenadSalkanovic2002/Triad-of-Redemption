@@ -4,7 +4,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 
 public class DefaultMap extends BaseMap {
     public DefaultMap(String mapPath, Player player, EnemyManager enemyManager) {
-        super(mapPath, player, enemyManager);
+        super(mapPath, player, enemyManager, false);
     }
 
     @Override

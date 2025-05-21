@@ -35,9 +35,13 @@ public class EnemyManager {
     }
 
     public void update(Player player, float delta) {
-        for (Enemy enemy : enemies) {
+        enemies.removeIf(enemy -> {
             enemy.update(player, delta);
-        }
+            if (enemy.getBounds().overlaps(player.getBounds())) {
+                enemy.attackPlayer(player);
+            }
+            return enemy.isDead();
+        });
     }
 
     public void render(SpriteBatch batch) {
