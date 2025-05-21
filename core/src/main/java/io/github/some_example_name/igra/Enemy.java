@@ -11,6 +11,7 @@ import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.graphics.Color;
 
 public class Enemy {
     private float x, y, speed;
@@ -28,6 +29,7 @@ public class Enemy {
     private CharacterDirection lastDirection;
     private boolean isAttacking = false;
     private boolean isFacingLeft = false;
+    private boolean damageApplied = false;
 
     private final ShapeRenderer shapeRenderer = new ShapeRenderer();
 
@@ -147,6 +149,31 @@ public class Enemy {
         bounds.setPosition(x, y);
     }
 
+    public void attackPlayer(Player player) {
+        if (currentState == CharacterState.ATTACKING) {
+            if (bounds.overlaps(player.getBounds()) && !damageApplied) {
+                player.takeDamage(25);
+                damageApplied = true;
+            }
+        }
+
+        // Reset the flag only when the attack animation ends
+        if (animationTime >= attack.getAnimationDuration()) {
+            damageApplied = false;
+            animationTime = 0; // Reset animation time to start a new cycle
+        }
+    }
+
+    public void takeDamage(int damage) {
+        health -= damage;
+        if (health <= 0) {
+            gameOver = true;
+        }
+    }
+    public boolean isDead() {
+        return gameOver;
+    }
+
     private boolean checkCollision(MapObjects objects) {
         for (MapObject obj : objects) {
             if (obj instanceof RectangleMapObject) {
@@ -162,40 +189,30 @@ public class Enemy {
     public void update(Player player, float delta) {
         animationTime += delta;
 
-        // Get direction vector to player
         float directionX = player.getX() - x;
         float directionY = player.getY() - y;
-
-        // Calculate distance to player
         float distanceToPlayer = (float) Math.sqrt(directionX * directionX + directionY * directionY);
 
-        // Only take action if player is within vision radius
         if (distanceToPlayer <= GameConfig.ENEMY_VISION_DISTANCE) {
-            // Player is within vision radius
-
-            // Set the state based on distance and movement
-            if (distanceToPlayer > GameConfig.ENEMY_ATTACK_DISTANCE) { // Not too close to the player
-                // Normalize direction vector
+            if (distanceToPlayer > GameConfig.ENEMY_ATTACK_DISTANCE) {
                 directionX /= distanceToPlayer;
                 directionY /= distanceToPlayer;
 
                 isFacingLeft = directionX < 0;
 
-                // Move toward player with collision checking
                 float moveX = directionX * GameConfig.ENEMY_SPEED * delta;
                 float moveY = directionY * GameConfig.ENEMY_SPEED * delta;
                 moveWithCollision(moveX, moveY);
 
                 currentState = CharacterState.WALKING;
-            } else { // Close enough to attack
+            } else {
                 currentState = CharacterState.ATTACKING;
+                attackPlayer(player);
             }
         } else {
-            // Player is outside vision radius, enemy stays idle
             currentState = CharacterState.IDLE;
         }
 
-        // Update animation frame
         switch (currentState) {
             case IDLE:
                 currentFrame = idle.getKeyFrame(animationTime);
@@ -218,10 +235,14 @@ public class Enemy {
         float drawX = isFacingLeft ? bounds.x + bounds.width : bounds.x;
         float drawWidth = isFacingLeft ? -bounds.width : bounds.width;
 
+        float scale = 2.1f;
+        float scaledWidth = bounds.width * scale;
+        float scaledHeight = bounds.height * scale;
+
         // Draw the sprite with appropriate flipping
         //TODO: Pogledi zakaj to faila, če je več kot en enemy - Adrian, zaenkrat je workaround tale pogoj z null
         if (currentFrame != null){
-            batch.draw(currentFrame, drawX, bounds.y, drawWidth, bounds.height);
+            batch.draw(currentFrame, drawX - bounds.width/2, bounds.y - bounds.height/2, scaledWidth, scaledHeight);
         }
 
 

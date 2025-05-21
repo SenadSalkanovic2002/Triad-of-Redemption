@@ -153,6 +153,30 @@ public class Player {
         bounds.setPosition(x, y);
     }
 
+    public void attackEnemies(EnemyManager enemyManager) {
+        if (currentState == CharacterState.ATTACKING) {
+            for (Enemy enemy : enemyManager.getEnemies()) {
+                if (bounds.overlaps(enemy.getBounds())) {
+                    enemy.takeDamage((int) GameConfig.PLAYER_DAMAGE);
+                }
+            }
+        }
+
+        // Reset the attack state when the animation ends
+        if (attackSide.isAnimationFinished(animationTime)) {
+            isAttacking = false;
+            currentState = CharacterState.IDLE;
+            animationTime = 0;
+        }
+    }
+
+    public void takeDamage(int damage) {
+        this.health -= damage;
+        if (health <= 0) {
+            gameOver = true;
+        }
+    }
+
     public void checkCollisions(MapObjects objects) {
         for (MapObject obj : objects) {
             if (obj instanceof RectangleMapObject) {
@@ -347,7 +371,7 @@ public class Player {
         }
     }
 
-    public void chooseAnimation() {
+    public void chooseAnimation(EnemyManager enemyManager) {
         boolean isMoving = Gdx.input.isKeyPressed(Input.Keys.W) ||
             Gdx.input.isKeyPressed(Input.Keys.A) ||
             Gdx.input.isKeyPressed(Input.Keys.S) ||
@@ -358,6 +382,7 @@ public class Player {
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE) || isAttacking) {
             newState = CharacterState.ATTACKING;
             isAttacking = true;
+            attackEnemies(enemyManager);
         } else if (isMoving) {
             newState = CharacterState.WALKING;
         } else {
