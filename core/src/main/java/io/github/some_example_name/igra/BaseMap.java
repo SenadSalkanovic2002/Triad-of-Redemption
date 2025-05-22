@@ -76,7 +76,7 @@ public abstract class BaseMap {
     player.handleInput(delta);
     player.chooseAnimation(
         enemyManager); // updates the current animation on every render, should be used in other
-                       // maps as well
+    // maps as well
     enemyManager.update(player, delta);
     if (checkTransition()) switchMap = true;
   }

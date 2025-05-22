@@ -45,7 +45,7 @@ public class Player {
   private Texture visionMask;
   private Rectangle
       attackHitbox; // Hitbox rectangle, is exposed with a method to check for collision with
-                    // enemies
+  // enemies
 
   private final ShapeRenderer shapeRenderer =
       new ShapeRenderer(); // debug thingy for the bounds rectangle
