@@ -144,6 +144,7 @@ public abstract class BaseMap {
     else if (player.isGameWon()) font.draw(batch, "YOU WIN!", 400, 300);
     batch.end();
 
+    player.checkFinalBoss();
     player.checkCollisions(collisions);
     player.checkTrap(traps, timeSinceLoad());
     player.checkEnd(endZones);
