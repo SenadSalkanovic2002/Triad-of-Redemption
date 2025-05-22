@@ -1,0 +1,34 @@
+name: Auto Format Java
+
+on:
+  push:
+    branches: [main]  # Or your default branch
+  workflow_dispatch:
+
+permissions:
+  contents: write  # Required for pushing changes
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Download google-java-format
+        run: curl -L -o gjf.jar https://github.com/google/google-java-format/releases/download/v1.17.0/google-java-format-1.17.0-all-deps.jar
+
+      - name: Run formatter
+        run: |
+          find . -name "*.java" > files.txt
+          xargs -a files.txt java -jar gjf.jar --replace
+
+      - name: Commit formatted code
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/${{ github.repository }}
+          git add .
+          git diff --cached --quiet || git commit -m "Auto-format Java code"
+          git push origin HEAD:${{ github.ref_name }}

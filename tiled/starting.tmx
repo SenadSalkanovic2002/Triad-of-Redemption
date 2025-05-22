@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="80" height="48" tilewidth="32" tileheight="32" infinite="0" nextlayerid="20" nextobjectid="21">
- <tileset firstgid="1" name="Tilemap_Flat" tilewidth="32" tileheight="32" tilecount="160" columns="20">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="80" height="48" tilewidth="32" tileheight="32" nextobjectid="22">
+ <tileset firstgid="1" name="Tilemap_Flat" tilewidth="32" tileheight="32" tilecount="160">
   <image source="Tiny Swords/Tiny Swords (Update 010)/Terrain/Ground/Tilemap_Flat.png" width="640" height="256"/>
   <tile id="20">
    <objectgroup draworder="index">
@@ -87,166 +87,172 @@
    </objectgroup>
   </tile>
  </tileset>
- <tileset firstgid="161" name="Water" tilewidth="32" tileheight="32" tilecount="4" columns="2">
+ <tileset firstgid="161" name="Water" tilewidth="32" tileheight="32" tilecount="4">
   <image source="Tiny Swords/Tiny Swords (Update 010)/Terrain/Water/Water.png" width="64" height="64"/>
  </tileset>
- <tileset firstgid="165" name="Water" tilewidth="32" tileheight="32" tilecount="4" columns="2">
+ <tileset firstgid="165" name="Water" tilewidth="32" tileheight="32" tilecount="4">
   <image source="Tiny Swords/Tiny Swords (Update 010)/Terrain/Water/Water.png" width="64" height="64"/>
  </tileset>
- <tileset firstgid="169" name="Decoration" tilewidth="192" tileheight="192" tilecount="18" columns="0">
+ <tileset firstgid="169" name="Decoration" tilewidth="192" tileheight="192" tilecount="18">
   <tile id="0">
-   <image source="../Tiny Swords/Tiny Swords (Update 010)/Deco/01.png" width="64" height="64"/>
+   <image width="64" height="64" source="../Tiny Swords/Tiny Swords (Update 010)/Deco/01.png"/>
   </tile>
   <tile id="1">
-   <image source="../Tiny Swords/Tiny Swords (Update 010)/Deco/02.png" width="64" height="64"/>
+   <image width="64" height="64" source="../Tiny Swords/Tiny Swords (Update 010)/Deco/02.png"/>
   </tile>
   <tile id="2">
-   <image source="../Tiny Swords/Tiny Swords (Update 010)/Deco/03.png" width="64" height="64"/>
+   <image width="64" height="64" source="../Tiny Swords/Tiny Swords (Update 010)/Deco/03.png"/>
   </tile>
   <tile id="3">
-   <image source="../Tiny Swords/Tiny Swords (Update 010)/Deco/04.png" width="64" height="64"/>
+   <image width="64" height="64" source="../Tiny Swords/Tiny Swords (Update 010)/Deco/04.png"/>
   </tile>
   <tile id="4">
-   <image source="../Tiny Swords/Tiny Swords (Update 010)/Deco/05.png" width="64" height="64"/>
+   <image width="64" height="64" source="../Tiny Swords/Tiny Swords (Update 010)/Deco/05.png"/>
   </tile>
   <tile id="5">
-   <image source="../Tiny Swords/Tiny Swords (Update 010)/Deco/06.png" width="64" height="64"/>
+   <image width="64" height="64" source="../Tiny Swords/Tiny Swords (Update 010)/Deco/06.png"/>
   </tile>
   <tile id="6">
-   <image source="../Tiny Swords/Tiny Swords (Update 010)/Deco/07.png" width="64" height="64"/>
+   <image width="64" height="64" source="../Tiny Swords/Tiny Swords (Update 010)/Deco/07.png"/>
   </tile>
   <tile id="7">
-   <image source="../Tiny Swords/Tiny Swords (Update 010)/Deco/08.png" width="64" height="64"/>
+   <image width="64" height="64" source="../Tiny Swords/Tiny Swords (Update 010)/Deco/08.png"/>
   </tile>
   <tile id="8">
-   <image source="../Tiny Swords/Tiny Swords (Update 010)/Deco/09.png" width="64" height="64"/>
+   <image width="64" height="64" source="../Tiny Swords/Tiny Swords (Update 010)/Deco/09.png"/>
   </tile>
   <tile id="9">
-   <image source="../Tiny Swords/Tiny Swords (Update 010)/Deco/10.png" width="64" height="64"/>
+   <image width="64" height="64" source="../Tiny Swords/Tiny Swords (Update 010)/Deco/10.png"/>
   </tile>
   <tile id="10">
-   <image source="../Tiny Swords/Tiny Swords (Update 010)/Deco/11.png" width="64" height="64"/>
+   <image width="64" height="64" source="../Tiny Swords/Tiny Swords (Update 010)/Deco/11.png"/>
   </tile>
   <tile id="11">
-   <image source="../Tiny Swords/Tiny Swords (Update 010)/Deco/12.png" width="64" height="64"/>
+   <image width="64" height="64" source="../Tiny Swords/Tiny Swords (Update 010)/Deco/12.png"/>
   </tile>
   <tile id="12">
-   <image source="../Tiny Swords/Tiny Swords (Update 010)/Deco/13.png" width="64" height="64"/>
+   <image width="64" height="64" source="../Tiny Swords/Tiny Swords (Update 010)/Deco/13.png"/>
   </tile>
   <tile id="13">
-   <image source="../Tiny Swords/Tiny Swords (Update 010)/Deco/14.png" width="64" height="64"/>
+   <image width="64" height="64" source="../Tiny Swords/Tiny Swords (Update 010)/Deco/14.png"/>
   </tile>
   <tile id="14">
-   <image source="../Tiny Swords/Tiny Swords (Update 010)/Deco/15.png" width="64" height="64"/>
+   <image width="64" height="64" source="../Tiny Swords/Tiny Swords (Update 010)/Deco/15.png"/>
   </tile>
   <tile id="15">
-   <image source="../Tiny Swords/Tiny Swords (Update 010)/Deco/16.png" width="64" height="128"/>
+   <image width="64" height="128" source="../Tiny Swords/Tiny Swords (Update 010)/Deco/16.png"/>
   </tile>
   <tile id="16">
-   <image source="../Tiny Swords/Tiny Swords (Update 010)/Deco/17.png" width="64" height="128"/>
+   <image width="64" height="128" source="../Tiny Swords/Tiny Swords (Update 010)/Deco/17.png"/>
   </tile>
   <tile id="17">
-   <image source="../Tiny Swords/Tiny Swords (Update 010)/Deco/18.png" width="192" height="192"/>
+   <image width="192" height="192" source="../Tiny Swords/Tiny Swords (Update 010)/Deco/18.png"/>
   </tile>
  </tileset>
- <tileset firstgid="187" name="Trees" tilewidth="128" tileheight="128" tilecount="2" columns="0">
+ <tileset firstgid="187" name="Trees" tilewidth="128" tileheight="128" tilecount="2">
   <tile id="0">
-   <image source="../Tiny Swords/Tiny Swords (Update 010)/Resources/Resources/G_Idle.png" width="128" height="128"/>
+   <image width="128" height="128" source="../Tiny Swords/Tiny Swords (Update 010)/Resources/Resources/G_Idle.png"/>
   </tile>
   <tile id="1">
-   <image source="../Tiny Swords/Tiny Swords (Update 010)/Resources/Resources/W_Idle.png" width="128" height="128"/>
+   <image width="128" height="128" source="../Tiny Swords/Tiny Swords (Update 010)/Resources/Resources/W_Idle.png"/>
   </tile>
  </tileset>
- <tileset firstgid="189" name="Tilemap_Flat2" tilewidth="32" tileheight="32" tilecount="160" columns="20">
+ <tileset firstgid="189" name="Tilemap_Flat2" tilewidth="32" tileheight="32" tilecount="160">
   <image source="../Tiny Swords/Tiny Swords (Update 010)/Terrain/Ground/Tilemap_Flat2.png" width="640" height="256"/>
  </tileset>
- <tileset firstgid="349" name="Tilemap_Elevation" tilewidth="32" tileheight="32" tilecount="128" columns="8">
+ <tileset firstgid="349" name="Tilemap_Elevation" tilewidth="32" tileheight="32" tilecount="128">
   <image source="../Tiny Swords/Tiny Swords (Update 010)/Terrain/Ground/Tilemap_Elevation.png" width="256" height="512"/>
  </tileset>
- <tileset firstgid="477" name="Bridge_All" tilewidth="32" tileheight="32" tilecount="48" columns="6">
+ <tileset firstgid="477" name="Bridge_All" tilewidth="32" tileheight="32" tilecount="48">
   <image source="../Tiny Swords/Tiny Swords (Update 010)/Terrain/Bridge/Bridge_All.png" width="192" height="256"/>
  </tileset>
- <tileset firstgid="525" name="Tree" tilewidth="32" tileheight="32" tilecount="432" columns="24">
+ <tileset firstgid="525" name="Tree" tilewidth="32" tileheight="32" tilecount="432">
   <image source="../Tiny Swords/Tiny Swords (Update 010)/Resources/Trees/Tree.png" width="768" height="576"/>
  </tileset>
- <tileset firstgid="957" name="Clouds" tilewidth="32" tileheight="32" tilecount="3600" columns="80">
+ <tileset firstgid="957" name="Clouds" tilewidth="32" tileheight="32" tilecount="3600">
   <image source="../Downloads/Clouds.png" width="2560" height="1440"/>
  </tileset>
- <tileset firstgid="4557" name="Goblin_House" tilewidth="32" tileheight="32" tilecount="24" columns="4">
+ <tileset firstgid="4557" name="Goblin_House" tilewidth="32" tileheight="32" tilecount="24">
   <image source="../Tiny Swords/Tiny Swords (Update 010)/Factions/Goblins/Buildings/Wood_House/Goblin_House.png" width="128" height="192"/>
  </tileset>
  <tileset firstgid="4581" source="Labyrinth/Tiled_files/trap_animation.tsx"/>
- <layer id="1" name="Background" width="80" height="48">
+ <tileset firstgid="4806" name="dungeon" tilewidth="1024" tileheight="1024" tilecount="1">
+  <tile id="0">
+   <image width="1024" height="1024" source="../assets/dungeon_entrance.png"/>
+  </tile>
+ </tileset>
+ <layer name="Background" width="80" height="48">
   <data encoding="base64" compression="zlib">
-   eJztw0ENAAAMA6Hz76JOZ2MPSFg1VVVVVVVVVVVVVVVVVVX1xQOxK2+I
+   eJztzjEJADAQBLDTUP/LmXldb6JQChmyp0kKAAAAAAAAAAAAAB+b8/4AAAAAcMsCVAlvvw==
   </data>
  </layer>
- <layer id="2" name="FloorRoadBridge" width="80" height="48">
+ <layer name="FloorRoadBridge" width="80" height="48">
   <data encoding="base64" compression="zlib">
    eJztmFkKwkAQBeP9cQXXO7h+xOV0dsBAGBJjfJpupQoe0qNZKF4mYJYBAAAA9Mdh4H0HAAA+FPsfe6AGDt9jZ872D3dHHHYGfxr408CfBv408KeBPw38aeBPA38a+NPAnwb+NPCngT8N/GngTwN/Gt7+hna9kWVsmVimllnlM11P57pjm85Zd2zb9dvOVfg7BfTXdX1lWVs2lrllYVkm6+m8ePLbV89V+LtZtk7+tg3313TfTevVZyh9pr45l/3z9JdbzpaL5fpjcwR/ffaF/sWaI/iL1Keuc17xV37ft79IfVL75+EvUp/U/e9K/9j/HPvH+5f+0b/fmSP4i9Qn+ufTP6//r/6hf7cP+LsDuqGwCw==
   </data>
  </layer>
- <layer id="3" name="FloorBridge1" width="80" height="48">
+ <layer name="FloorBridge1" width="80" height="48">
   <data encoding="base64" compression="zlib">
    eJzt2VWQHQUWBuBeYVyIEXdXIAkQQUNccSLA7gJxdw8QFzQJEME1AqwCcSDuMpkkk4kLEME1Aux+88xU7Vxq696arf6rvufT55/Ttx8mCMKECRMmTJgwYcKECRMmTJgwYcKECRMmTJgwYcKECbMxMQg2sZktbGUb29nBTnaRwW4y2cNe9pHF/sRYbxG7FEsKguKUoCSlKE0ZylKO8lSgIpWoTBWqUo3qSbHeInbpYfee9KI3fehLP/ozgIEMYjBDGMowhjOCkUmR3Wo2BzjIIQ7n3HwBN88OdhaIdSt5zxK7L2UZy1nBSlbxAR/yEatZw1rWsZ4NbGRThLdag5rUojZ12KWzDHaTmY/6S0gOgkSSSCaFVNJI51IKUJBCFKYIl1GUYhRPjuxWRzGaMYxlHHt0tpd9ZOWj/jravROd6cI93Mt9/Ik/8xfu5wEepCvd6E4PeiZHdqub2cJWtrGd/TrL5gAH81F/C+y+kEUs5i3e5h3+yt/4O//gn/yLd3mP91nC0ghvtQQlKUVpynBIZ4c5wtF81N85z36eC1zkJ37mF/5NkBIEv+P3/IE/cglxxJNAYkpkt9qL3vShL/04prPjnOBkPuqvpd1b0Zo2tKUd7enALdzKbdzOHdzJXdxNRzqlRHary1jOClayKuf9T451E78tc+w+l3nM5zme5wVe5CVe5hVe5TVe5w3eZAELUyK71SSSSSGVNNJTYt3Eb8spz32aM5zlMz7nC77kK77mG77lO77nB37kHOcjvNXOdOEe7uW+nPc/n/bXIDUIGtKIxlzLdVzPDdzITTThZprSjOa0oCWtUiO71UUs5i3e5p2c9z+f9ve/SiS3eoGL/MTP/JLz/uehvyZx/oY0pRnNaUFLWtGaNrSlHe3pwC3cym3czh3cyV3cTUc60TkuOjO6xP16t0hutTVtaEs72tMh9b/3N9PcWczmaZ7hWeYwl3nM5zme5wVe5CVe5hVe5TVe5w3eZAELWRQXnRmLc+kvGjlu7glO8jGf8CmnOM0ZzvIZn/MFX/IVX/MN3/Id3/MDP3KO81yIi86MizHqr258ENSjPldxNdfQgIY0ojHXch3XcwM3chNNuJmmNKM5LWhJK1rHR2dGm/jY9Dfe3AlMZBKTmcJUpjGdGTzKYzzOEzzJU8xkFrN5mmd4ljnMZV58dGbMz6W/SX7/JzOFqUxjOjN4lMd4nCd4kqeYySxm5/Hbm2HubjLZw172kcV+sjnAQQ5xmCMc5RjHOcFJPuYTPuUUpzkTH50ZZ3Ppb48O9rKPLPaTzQEOcojDHOEoxzjOCU7msb8KCUFQkUpUpgpVqUZ1alCTWtSmDpdzBVdSl3rU5yqu5hoa0JBGCdGZ0Tjh17tV9v2sQlWqUZ0a1KQWtanD5VzBldSlHvXz8O3NySBzBzOEoQxjOCMYyShGM4axjOMhHuYRxjOBiUxiMlOYyjSmJ0Rnxoxc+huqg2EMZwQjGcVoxjCWcTzEwzzCeCYwMY/9rTZ3DWtZx3o2sJFNbGYLW9nGdnawk11ksJtM9rCXfWSxn+yE6Mw4kEt/63Swng1sZBOb2cJWtrGdHexkFxnsJjOP/RVMDIJCFKYIl1GUYhSnBCUpRWnKUJZylKcCFalEZapQlWpUp0ZidGbUzOX/bUXSzKIoxShOCUpSitKUoSzlKE8FKlIpLW/93W/uAzxIV7rRnR70pBe96UNf+tGfAQxkEIMZwlCGMZwRjGRUYnRmjM6lv6466EZ3etCTXvSmD33pR38GMJBBDGZIHvv7f867OniP91nCUpaxnBWsZBUf8CEfsZo1rA37Cy5JD4I44kkgkSSSSSGVNNK5lAIUpBCF02P99LHPfwBf/2Xa
   </data>
  </layer>
- <layer id="4" name="FloorBridge" width="80" height="48">
+ <layer name="FloorBridge" width="80" height="48">
   <data encoding="base64" compression="zlib">
    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
   </data>
  </layer>
- <layer id="5" name="Floor" width="80" height="48">
+ <layer name="Floor" width="80" height="48">
   <data encoding="base64" compression="zlib">
    eJztmcetAkEQBQebAeaTATYD3M8AmwE2/wB4c9sDoBE7ordRlVRaGiEhvUMdIAQAAADwQk3WZUM2HdqS7eyrpNORXdmTffnn8B5kXyWduN9IjuVETh3es+yrpBP3W8ilXMm1w/s/yxKfEffbyp3cy4PD23o/636Vva33s+5X2dt6P+t+0T/6V6We0T/65+m23s+6X/SP/lWpZ/SP/nm6rfez7hf9o39V6hn9++5t+fvzMNj3y3P/5sG+X57//9gE+3557l/cz7pfZe9j9lXSOclzwUvheX3x+t3nnj1T30t9Fr/3Ju/ZVwEAAAAAAAAAAIBf4gFauw4u
   </data>
  </layer>
- <layer id="6" name="Road" width="80" height="48">
+ <layer name="Road" width="80" height="48">
   <data encoding="base64" compression="zlib">
    eJzt1VtOwkAAheFp4ou+dQG6AhB3IOoSEF2qiSvwAnhX8IKAbkATffaY0NhOWpBWMh35v+RkZjqETE9aMAYAAACAz9pKx/UhPDZURq4P4bEP5dP1ITy2HBizErg+hb9W1d0a/eXG81cMz18x/H8Uw/tbzCK8v5u6v7qypWwrO+N5tD7WZ06U09h4ZJLXs9ZvynvG/m+/I1q35l1ETktBdqL7L8M4mG8NuTXU067SVPaU/di8olSVdaU2jn3NXk/am3Udn2/8898B4C+1Q2M6yplyHro+TfnZfV0ol8qVch3S5zR2XzfKrXKndFP6RJLdV0+5Vx6Ux5Q+kWT39aT0lWdlkNInkuy+hsqhrr9ofE3p88D1gUvmu69R+NPXtH36AwAAAAAAAIDF8AVvtpPv
   </data>
  </layer>
- <layer id="7" name="Details4" width="80" height="48">
+ <layer name="Details4" width="80" height="48">
   <data encoding="base64" compression="zlib">
    eJzt1v8KgjAQwPH5/k9SgeAfPY8VWD5GBg6OY79FNvP7gcPacK3bbWoMAADn09eeAJpwL+i/Re7RtRX7bg0Zc6jpyHvnWnsCglzXWE5//ZfCsXPI2s75vZb4crll7Vuqm73Z2nGtf+zsSxm79Pxo5dzZMo89z/Le8/msUnKdcu62qORs1vkI5cf1LhLKRat52kvo/w6OkI76XJV6Fchn68DmT78P6v1Zmmc7jqxDXZ++Z/4/1GoJ194dVJ9sYw8cy9gZ81hj9Fxdbc8lXl3t2dc3LTl4rzF5rq62zxIz+QMAAAAAAAAAAAAAANjsC+tdTyw=
   </data>
  </layer>
- <layer id="8" name="Details3" width="80" height="48">
+ <layer name="Details3" width="80" height="48">
   <data encoding="base64" compression="zlib">
    eJzt1edPFEEAhvHNfAelKQKiaFRUQBEVkShWQEFqQMGCqBQlCqjYBYXQBLH3f9bnPphsJlsCwb2Fe5/kl0wm2ZvJZHbPcZRae203jlOEHdhpwudX+ntpjNOxARuRgUxkIRs52ITNyMUW5CEfBdiKQmwzK9/b/+gY61fhOKpN+HyioP37PbeL8W7sQTH2Yh/2owSlKMMBHEQ5DqECh3EER1FpgvcWdS2s34o2tJvw+URB+/d77gTjk6jBKZzGGZzFOZxHLepQjwu4iAY04hKa0GyC9xZ1g6x/F/cwZPzn3fctaP9+v9fBuBOXcQVd6MZVXMN13EAPbqIXt3Abd9CHfgwY/zWS0RvWf4tJTBn/efd9s/fvfp/9fu8+4wcYxghG8RCP8BhjeIKneIbneIGXeIXXGMdEwBrJ6Cfr/8Jv/HGdhT3vvm/2/t3vs/3cv6YZz2AWc5jHOyxgEe+xhA/4iE/4jC/4im/4jh8BayQj+7/A69tm3zd7/3H6HkWdfV5eZ2HfN/u/N07fo6izz8vrLOz7Zt/POH2Pos4+r7Cz8LqfcfoeRZ19XmFnkcrvqlfLvTup/K6uRqn8riqllFJKKaWUUkoppZRSSimllFJKKaWUUkqtp/4CVml9PA==
   </data>
  </layer>
- <layer id="9" name="Details2" width="80" height="48">
+ <layer name="Details2" width="80" height="48">
   <data encoding="base64" compression="zlib">
    eJzt1VdOAzEUhWEzQ1sBRaKtnCLRVpCAFMoKKBJtBRSJtgLgIPxg7jhTiGA86P+k80KckX1yxzgHAACAv7CZObelbCs7Wdu76Z6BOjtQDpWjGv3R93cX6uBSuVKufR9lHTXtuy32DLs/3GvVvDzqb0/Ks/LiPy/rKNZ3Kla1nzVlPSueoeqdGda3fY5dN547N6FMKlP513fKOor1nYqe9tNX9rLiGareGdvTsV9nn2PXLaizRWVJWfb9lXUU6zsVJ9rrqXKWFc9g5yGc1Y1I3zd+nX1OnfuurKNY36m41d7vlPvIGew8hLO6H+n71a+zz6lz36XcUZk37f3980x58Qx2HsJZPY/0Pe3X2ec0ve+6ZEbnmVXmlPngd4/NQzirD5GZWRkyN03vu/8qnNWxEd+xlP8n/JZwVkfV1fuuC3o+/bY3AgAAAAAAAAAAAAAAACTsA6/7lZk=
   </data>
  </layer>
- <layer id="10" name="Details1" width="80" height="48">
+ <layer name="Details1" width="80" height="48">
   <data encoding="base64" compression="zlib">
    eJzt19dKXFEYhuFhX4AmYI29YAF77IpRsPdGomASew1RQY0xsYsF7L1diN6d78nAMOyjWQMOe38vPAdrHwz/Wic/4/EopfyLsDyeSEQhGjGIxSfEIR4JSEQSkpGCVKQh3XrvG7xvOdw/F3nIRwEKUYTPKEYJSlGGclSgElWodvn71XP/BjSiCc1oQSva0I4OdKIL3ehBL/rQ7/L3G+L+3/EDPzGMEYxiDOOYwCSmMI0ZzGIOv1z+fkvcfxkr+INV/MUa/uE/1rGBTWxhGzvYxZ7L3++Y+5/gFGc4xwUucYVr3OAWd7jHAx7xhGeXv59/2sdmaR+bpX1slvaxWU7bx2HME44P+GiZn+3y3Rn++9i7M/z3sfd7qO/jDObJRBayLfOzXYHsDO/3UN8ZNcz2BbWos8zPdjl5Z3xltm8YwKBlfrbLyTvjN7PNYwGLlvnZLqftDN/2me0AhziyzM926T9c4L0G4TdegvAbSimllFJKKaWUUkoppZRSSimllFJKObk3H6yNtQ==
   </data>
  </layer>
- <layer id="11" name="Stairs" width="80" height="48">
+ <layer name="Stairs" width="80" height="48">
   <data encoding="base64" compression="zlib">
-   eJztwTEBAAAAwqD1T20ND6AAAAAAAAAAAAAAAAAAAIAXAzwAAAE=
+   eJztzgEJAAAIA7BnsH8ec1lCEGFLsAQAAAAAAAAAANjWdT0AAAAAAAC+GtTaANk=
   </data>
  </layer>
- <objectgroup id="12" name="wall">
+ <objectgroup name="wall">
   <object id="1" x="454" y="1022" width="1590" height="136"/>
   <object id="2" x="2054" y="186" width="222" height="986"/>
   <object id="5" x="464" y="50" width="1570" height="118"/>
   <object id="6" x="198" y="200" width="226" height="834"/>
   <object id="7" x="476" y="244" width="676" height="308"/>
-  <object id="8" x="1310" y="274" width="688" height="280"/>
+  <object id="8" x="1310" y="274" width="158" height="280"/>
   <object id="9" x="538" y="802" width="348" height="158"/>
  </objectgroup>
- <objectgroup id="13" name="start">
+ <objectgroup name="start">
   <object id="10" name="Start" x="502" y="648"/>
+  <object id="21" x="1465.53" y="336.995" width="158" height="565.832" rotation="-89.6272"/>
  </objectgroup>
- <objectgroup id="14" name="end">
-  <object id="12" name="end" x="1760" y="636"/>
+ <objectgroup name="end">
+  <object id="12" name="end" x="2468" y="30" width="72" height="22"/>
  </objectgroup>
- <objectgroup id="17" name="next_map">
-  <object id="19" name="labirint.tmx" x="1213.67" y="691.667" width="632" height="210.667"/>
+ <objectgroup name="next_map">
+  <object id="19" name="labirint.tmx" x="1724" y="365.667" width="321.67" height="192.333"/>
  </objectgroup>
 </map>

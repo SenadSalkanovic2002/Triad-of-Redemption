@@ -1,0 +1,9 @@
+﻿{
+  "agentId": 2,
+  "agentName": "SENAD",
+  "poolId": 1,
+  "poolName": "Default",
+  "serverUrl": "https://pipelinesghubeus9.actions.githubusercontent.com/DhRIO1yIXs3Q8njiXoyQwZaDonJXgJHEZx3sK96vGnKe9gvscm/",
+  "gitHubUrl": "https://github.com/SenadSalkanovic2002/Triad-of-Redemption",
+  "workFolder": "src"
+}
