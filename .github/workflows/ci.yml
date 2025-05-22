@@ -1,56 +1,26 @@
-name: CI Workflow
+name: Format Java
 
-on: [push]
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
 
 jobs:
-  linux-build:
+  format:
     runs-on: ubuntu-latest
-    name: Build and Test on Linux
-
     steps:
-      - name: Checkout source code
-        uses: actions/checkout@v4
-
-      - name: Set up Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: 17
-
-      - name: Build project
-        run: ./gradlew build
-
-      - name: Run unit tests
-        run: ./gradlew test
-
-      - name: Save test results
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results-linux
-          path: build/test-results/test
-
-  windows-build:
-    runs-on: self-hosted
-    name: Build and Analyze on Windows
-
-    steps:
-      - name: Checkout source code
-        uses: actions/checkout@v4
-
-      - name: Set up Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: 17
-
-      - name: Build project
-        run: gradlew.bat build
-
-      - name: Run static analysis
-        run: gradlew.bat check
-
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-windows
-          path: build/libs
+      - uses: actions/checkout@v3
+      - name: Download google-java-format
+        run: |
+          curl -L -o gjf.jar https://github.com/google/google-java-format/releases/download/v1.17.0/google-java-format-1.17.0-all-deps.jar
+      - name: Format code
+        run: |
+          find . -name "*.java" > files.txt
+          xargs -a files.txt java -jar gjf.jar --replace
+      - name: Commit changes
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add .
+          git diff --cached --quiet || git commit -m "Auto-format Java code"
+          git push
