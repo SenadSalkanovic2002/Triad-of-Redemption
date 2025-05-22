@@ -56,9 +56,7 @@ public abstract class BaseMap {
     for (MapObject obj : map.getLayers().get("start").getObjects()) {
       if (obj instanceof RectangleMapObject && "Start".equals(obj.getName())) {
         Rectangle rect = ((RectangleMapObject) obj).getRectangle();
-        player.setPosition(
-            rect.x,
-            rect.y);
+        player.setPosition(rect.x, rect.y);
         // Only spawn enemies in SkeletonMap
         if (this instanceof io.github.some_example_name.igra.maps.SkeletonMap) {
           enemyManager.addEnemy(rect.x, rect.y);

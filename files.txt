@@ -5,6 +5,7 @@
 ./core/src/main/java/io/github/some_example_name/igra/CharacterDirection.java
 ./core/src/main/java/io/github/some_example_name/igra/DefaultMap.java
 ./core/src/main/java/io/github/some_example_name/igra/maps/BossArenaMap.java
+./core/src/main/java/io/github/some_example_name/igra/maps/SkeletonMap.java
 ./core/src/main/java/io/github/some_example_name/igra/maps/LabyrinthMap.java
 ./core/src/main/java/io/github/some_example_name/igra/CharacterState.java
 ./core/src/main/java/io/github/some_example_name/igra/Player.java
