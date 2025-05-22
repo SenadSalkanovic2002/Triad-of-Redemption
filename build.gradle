@@ -9,8 +9,6 @@ buildscript {
     maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots/' }
   }
   dependencies {
-
-
   }
 }
 
@@ -68,6 +66,8 @@ subprojects {
     maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots/' }
     maven { url 'https://jitpack.io' }
   }
+
 }
 
 eclipse.project.name = 'Triad of Redemption' + '-parent'
+
