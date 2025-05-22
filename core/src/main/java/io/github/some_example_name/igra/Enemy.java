@@ -2,6 +2,7 @@ package io.github.some_example_name.igra;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -153,7 +154,7 @@ public class Enemy {
   public void attackPlayer(Player player) {
     if (currentState == CharacterState.ATTACKING) {
       if (bounds.overlaps(player.getBounds()) && !damageApplied) {
-        player.takeDamage(25);
+        player.takeDamage(GameConfig.ENEMY_ATTACK_DAMAGE);
         damageApplied = true;
       }
     }
@@ -230,37 +231,42 @@ public class Enemy {
     }
   }
 
-  public void render(SpriteBatch batch) {
-    animationTime += Gdx.graphics.getDeltaTime();
+    public void render(SpriteBatch batch) {
+        animationTime += Gdx.graphics.getDeltaTime();
 
-    // Calculate draw parameters based on facing direction
-    float drawX = isFacingLeft ? bounds.x + bounds.width : bounds.x;
-    float drawWidth = isFacingLeft ? -bounds.width : bounds.width;
+        float scale = 2.1f;
+        float drawX = bounds.x - bounds.width / 2;
+        float drawY = bounds.y - bounds.height / 2;
+        float drawWidth = bounds.width * scale;
+        float drawHeight = bounds.height * scale;
 
-    float scale = 2.1f;
-    float scaledWidth = bounds.width * scale;
-    float scaledHeight = bounds.height * scale;
+        if (currentFrame != null) {
+            TextureRegion frameToDraw = new TextureRegion(currentFrame);
 
-    // Draw the sprite with appropriate flipping
-    // TODO: Pogledi zakaj to faila, če je več kot en enemy - Adrian, zaenkrat je workaround tale
-    // pogoj z null
-    if (currentFrame != null) {
-      batch.draw(
-          currentFrame,
-          drawX - bounds.width / 2,
-          bounds.y - bounds.height / 2,
-          scaledWidth,
-          scaledHeight);
+            if (isFacingLeft && !frameToDraw.isFlipX()) {
+                frameToDraw.flip(true, false);
+            } else if (!isFacingLeft && frameToDraw.isFlipX()) {
+                frameToDraw.flip(true, false);
+            }
+
+            batch.draw(
+                frameToDraw,
+                drawX,
+                drawY,
+                drawWidth,
+                drawHeight
+            );
+        }
+
+        batch.end();
+
+        shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.setColor(Color.CYAN);
+        shapeRenderer.rect(bounds.x, bounds.y, bounds.width, bounds.height);
+        shapeRenderer.end();
+
+        batch.begin();
     }
 
-    //        batch.end();
-    //
-    //        shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
-    //        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-    //        shapeRenderer.setColor(Color.RED);
-    //        shapeRenderer.rect(bounds.x, bounds.y, bounds.width, bounds.height);
-    //        shapeRenderer.end();
-    //
-    //        batch.begin();
-  }
 }

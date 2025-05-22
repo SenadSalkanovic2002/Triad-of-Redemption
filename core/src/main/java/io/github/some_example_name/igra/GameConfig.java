@@ -21,8 +21,8 @@ public class GameConfig {
   // Enemy
   public static final int ENEMY_WIDTH = 32;
   public static final int ENEMY_HEIGHT = 32;
-  public static final float ENEMY_SPEED = 100f; // Speed of the player
-  public static final float ENEMY_DAMAGE = 10.0f; // Damage dealt by the player
+  public static final float ENEMY_SPEED = 50f; // Speed of the player
+  public static final int ENEMY_ATTACK_DAMAGE = 5; // Damage dealt by the player
   public static final int ENEMY_HEALTH = 100; // Health of the player
   public static final float ENEMY_VISION_DISTANCE = 1000.0f;
   public static final int ENEMY_ATTACK_DISTANCE = 20;

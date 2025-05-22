@@ -24,7 +24,7 @@ public abstract class BaseMap {
   protected float defaultZoom = 1f;
   protected boolean cameraTracksPlayer = true;
   protected boolean isSmallerScale = false;
-  protected long timeOfLoad = 0; // In milliseconds
+  protected long timeOfLoad = 0;
 
   public BaseMap(String mapPath, Player player, EnemyManager enemyManager, boolean isSmallerScale) {
     this.player = player;
