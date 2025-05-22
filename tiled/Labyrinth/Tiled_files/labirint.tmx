@@ -860,7 +860,7 @@
   <object id="311" x="1966.81" y="1727.38" width="51.874" height="32.6136"/>
  </objectgroup>
  <objectgroup id="8" name="next_map">
-  <object id="315" name="finalBoss.tmx" x="966.667" y="108.667" width="36.6667" height="31.3333"/>
+  <object id="315" name="dungeonMap.tmx" x="966.667" y="108.667" width="36.6667" height="31.3333"/>
  </objectgroup>
  <objectgroup id="6" name="wall" visible="0">
   <object id="1" x="1058.36" y="1904" width="43.6364" height="144.727"/>

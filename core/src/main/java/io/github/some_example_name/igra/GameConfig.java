@@ -19,8 +19,8 @@ public class GameConfig {
   public static final float PLAYER_ANIMATION_ATTACKING_DURATION = 0.07f;
 
   // Enemy
-  public static final int ENEMY_WIDTH = 96;
-  public static final int ENEMY_HEIGHT = 96;
+  public static final int ENEMY_WIDTH = 32;
+  public static final int ENEMY_HEIGHT = 32;
   public static final float ENEMY_SPEED = 100f; // Speed of the player
   public static final float ENEMY_DAMAGE = 10.0f; // Damage dealt by the player
   public static final int ENEMY_HEALTH = 100; // Health of the player

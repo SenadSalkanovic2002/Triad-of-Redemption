@@ -58,8 +58,11 @@ public abstract class BaseMap {
         Rectangle rect = ((RectangleMapObject) obj).getRectangle();
         player.setPosition(
             rect.x,
-            rect.y - 100); // had to fix the spawn location, player spawned stuck inside the trees
-        enemyManager.addEnemy(rect.x, rect.y);
+            rect.y);
+        // Only spawn enemies in SkeletonMap
+        if (this instanceof io.github.some_example_name.igra.maps.SkeletonMap) {
+          enemyManager.addEnemy(rect.x, rect.y);
+        }
       }
     }
     setupAdditionalLayers();
@@ -87,6 +90,12 @@ public abstract class BaseMap {
       if (obj instanceof RectangleMapObject) {
         Rectangle rect = ((RectangleMapObject) obj).getRectangle();
         if (rect.overlaps(bounds)) {
+          // Only allow next_map if all skeletons are dead in SkeletonMap
+          if (this instanceof io.github.some_example_name.igra.maps.SkeletonMap) {
+            if (!enemyManager.getEnemies().isEmpty()) {
+              return false;
+            }
+          }
           String newMap = obj.getName();
           if (newMap != null && newMap.endsWith(".tmx")) {
             nextMapPath = "tiled/" + newMap;
