@@ -231,42 +231,35 @@ public class Enemy {
     }
   }
 
-    public void render(SpriteBatch batch) {
-        animationTime += Gdx.graphics.getDeltaTime();
+  public void render(SpriteBatch batch) {
+    animationTime += Gdx.graphics.getDeltaTime();
 
-        float scale = 2.1f;
-        float drawX = bounds.x - bounds.width / 2;
-        float drawY = bounds.y - bounds.height / 2;
-        float drawWidth = bounds.width * scale;
-        float drawHeight = bounds.height * scale;
+    float scale = 2.1f;
+    float drawX = bounds.x - bounds.width / 2;
+    float drawY = bounds.y - bounds.height / 2;
+    float drawWidth = bounds.width * scale;
+    float drawHeight = bounds.height * scale;
 
-        if (currentFrame != null) {
-            TextureRegion frameToDraw = new TextureRegion(currentFrame);
+    if (currentFrame != null) {
+      TextureRegion frameToDraw = new TextureRegion(currentFrame);
 
-            if (isFacingLeft && !frameToDraw.isFlipX()) {
-                frameToDraw.flip(true, false);
-            } else if (!isFacingLeft && frameToDraw.isFlipX()) {
-                frameToDraw.flip(true, false);
-            }
+      if (isFacingLeft && !frameToDraw.isFlipX()) {
+        frameToDraw.flip(true, false);
+      } else if (!isFacingLeft && frameToDraw.isFlipX()) {
+        frameToDraw.flip(true, false);
+      }
 
-            batch.draw(
-                frameToDraw,
-                drawX,
-                drawY,
-                drawWidth,
-                drawHeight
-            );
-        }
-
-        batch.end();
-
-        shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(Color.CYAN);
-        shapeRenderer.rect(bounds.x, bounds.y, bounds.width, bounds.height);
-        shapeRenderer.end();
-
-        batch.begin();
+      batch.draw(frameToDraw, drawX, drawY, drawWidth, drawHeight);
     }
 
+    batch.end();
+
+    shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+    shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+    shapeRenderer.setColor(Color.CYAN);
+    shapeRenderer.rect(bounds.x, bounds.y, bounds.width, bounds.height);
+    shapeRenderer.end();
+
+    batch.begin();
+  }
 }
