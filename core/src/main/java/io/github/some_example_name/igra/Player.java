@@ -18,6 +18,9 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class Player {
   private float x, y, speed;
   private Rectangle bounds;
@@ -26,7 +29,7 @@ public class Player {
   private int health, score;
   private boolean gameOver, gameWon, inSlowZone;
   private BaseMap map;
-  private Animation<TextureRegion> idle,
+    private Animation<TextureRegion> idle,
       walkSide,
       walkUp,
       walkDown,
@@ -46,6 +49,7 @@ public class Player {
   private Rectangle
       attackHitbox; // Hitbox rectangle, is exposed with a method to check for collision with
   // enemies
+  private Set<Enemy> hitEnemies = new HashSet<>();
 
   private final ShapeRenderer shapeRenderer =
       new ShapeRenderer(); // debug thingy for the bounds rectangle
@@ -164,29 +168,36 @@ public class Player {
     bounds.setPosition(x, y);
   }
 
-  public void attackEnemies(EnemyManager enemyManager) {
-    if (currentState == CharacterState.ATTACKING) {
-      for (Enemy enemy : enemyManager.getEnemies()) {
-        if (bounds.overlaps(enemy.getBounds())) {
-          enemy.takeDamage((int) GameConfig.PLAYER_DAMAGE);
+    public void attackEnemies(EnemyManager enemyManager) {
+        if (currentState == CharacterState.ATTACKING) {
+            for (Enemy enemy : enemyManager.getEnemies()) {
+                if (bounds.overlaps(enemy.getBounds()) && !hitEnemies.contains(enemy)) {
+                    enemy.takeDamage(GameConfig.PLAYER_DAMAGE);
+                    hitEnemies.add(enemy); // Only hit once per attack
+                }
+            }
         }
-      }
+
+        // Reset the attack state when the animation ends
+        if (attackSide.isAnimationFinished(animationTime)) {
+            isAttacking = false;
+            currentState = CharacterState.IDLE;
+            animationTime = 0;
+            hitEnemies.clear(); // Allow hitting enemies in the next attack
+        }
     }
 
-    // Reset the attack state when the animation ends
-    if (attackSide.isAnimationFinished(animationTime)) {
-      isAttacking = false;
-      currentState = CharacterState.IDLE;
-      animationTime = 0;
-    }
-  }
 
-  public void takeDamage(int damage) {
-    this.health -= damage;
-    if (health <= 0) {
-      gameOver = true;
+    public void takeDamage(int damage) {
+        health -= damage;
+        if (health <= 0 && !gameOver) {
+            gameOver = true;
+            System.out.println("Enemy died!");
+        } else {
+            System.out.println("Enemy took damage! Remaining HP: " + health);
+        }
     }
-  }
+
 
   public void checkCollisions(MapObjects objects) {
     for (MapObject obj : objects) {
