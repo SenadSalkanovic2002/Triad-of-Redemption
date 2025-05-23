@@ -1,5 +1,6 @@
 ./core/src/main/java/io/github/some_example_name/screens/MainGameScreen.java
 ./core/src/main/java/io/github/some_example_name/screens/IntroScreen.java
+./core/src/main/java/io/github/some_example_name/screens/GameOverScreen.java
 ./core/src/main/java/io/github/some_example_name/screens/MainMenuScreen.java
 ./core/src/main/java/io/github/some_example_name/MainGame.java
 ./core/src/main/java/io/github/some_example_name/igra/CharacterDirection.java

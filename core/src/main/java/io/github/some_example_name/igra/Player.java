@@ -17,6 +17,7 @@ import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
+
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
@@ -25,6 +26,10 @@ import java.io.Console;
 import io.github.some_example_name.igra.modalminigame.PortalModal;
 import io.github.some_example_name.igra.modalminigame.QuestionMiniGame;
 import io.github.some_example_name.igra.modalminigame.QuestionModal;
+
+import java.util.HashSet;
+import java.util.Set;
+
 
 public class Player {
   private float x, y, speed;
@@ -54,6 +59,7 @@ public class Player {
   private Rectangle
       attackHitbox; // Hitbox rectangle, is exposed with a method to check for collision with
   // enemies
+
   private QuestionModal questionModal;
     private PortalModal portalModal;
     private Stage uiStage;
@@ -69,6 +75,7 @@ public class Player {
         this.uiStage = uiStage;
         this.skin = skin;
     }
+  private Set<Enemy> hitEnemies = new HashSet<>();
 
   private final ShapeRenderer shapeRenderer =
       new ShapeRenderer(); // debug thingy for the bounds rectangle
@@ -190,8 +197,9 @@ public class Player {
   public void attackEnemies(EnemyManager enemyManager) {
     if (currentState == CharacterState.ATTACKING) {
       for (Enemy enemy : enemyManager.getEnemies()) {
-        if (bounds.overlaps(enemy.getBounds())) {
-          enemy.takeDamage((int) GameConfig.PLAYER_DAMAGE);
+        if (bounds.overlaps(enemy.getBounds()) && !hitEnemies.contains(enemy)) {
+          enemy.takeDamage(GameConfig.PLAYER_DAMAGE);
+          hitEnemies.add(enemy); // Only hit once per attack
         }
       }
     }
@@ -201,17 +209,35 @@ public class Player {
       isAttacking = false;
       currentState = CharacterState.IDLE;
       animationTime = 0;
+      hitEnemies.clear(); // Allow hitting enemies in the next attack
     }
   }
 
   public void takeDamage(int damage) {
-    this.health -= damage;
-    if (health <= 0) {
+    health -= damage;
+    if (health <= 0 && !gameOver) {
       gameOver = true;
+      System.out.println("Enemy died!");
+    } else {
+      System.out.println("Enemy took damage! Remaining HP: " + health);
     }
   }
 
   public void checkCollisions(MapObjects objects) {
+    for (MapObject obj : objects) {
+      if (obj instanceof RectangleMapObject) {
+        Rectangle rect = ((RectangleMapObject) obj).getRectangle();
+        if (bounds.overlaps(rect)) {
+          x -= dx();
+          y -= dy();
+          bounds.setPosition(x, y);
+          return;
+        }
+      }
+    }
+  }
+
+  public void checkWaterCollisions(MapObjects objects) {
     for (MapObject obj : objects) {
       if (obj instanceof RectangleMapObject) {
         Rectangle rect = ((RectangleMapObject) obj).getRectangle();
