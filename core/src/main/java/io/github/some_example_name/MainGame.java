@@ -4,6 +4,12 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
+import io.github.some_example_name.igra.modalminigame.PortalModal;
+import io.github.some_example_name.igra.modalminigame.QuestionModal;
 import io.github.some_example_name.screens.IntroScreen;
 
 /**
@@ -11,6 +17,8 @@ import io.github.some_example_name.screens.IntroScreen;
  */
 public class MainGame extends Game {
   // Shared resources
+
+
   private SpriteBatch batch;
   private BitmapFont font;
   private BitmapFont fontSmaller;
