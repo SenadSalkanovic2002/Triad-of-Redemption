@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-
 import io.github.some_example_name.MainGame;
 import io.github.some_example_name.igra.*;
 import io.github.some_example_name.igra.modalminigame.PortalModal;
@@ -34,12 +33,13 @@ public class MainGameScreen implements Screen {
   private BaseMap currentMap;
   private EnemyManager enemyManager;
   private TextureAtlas enemyTexture;
-    private Stage uiStage;
-    private Skin skin;
+  private Stage uiStage;
+  private Skin skin;
 
-    // Polje
-    private QuestionModal questionModal;
-    private PortalModal portalModal;
+  // Polje
+  private QuestionModal questionModal;
+  private PortalModal portalModal;
+
   public MainGameScreen(MainGame game) {
     this.game = game;
   }
@@ -86,14 +86,14 @@ public class MainGameScreen implements Screen {
     camera.zoom = currentMap.getDefaultZoom();
     player.setMap(currentMap);
 
-      questionModal = new QuestionModal();
-      uiStage = new Stage(new ScreenViewport());
-      skin = new Skin(Gdx.files.internal("uiskin/uiskin.json")); // Potrebuješ uiskin (glej spodaj)
-      Gdx.input.setInputProcessor(uiStage);
-      portalModal = new PortalModal();
-      player.setQuestionModal(questionModal);
-      player.setPortalModal(portalModal);
-      player.setUI(uiStage, skin);
+    questionModal = new QuestionModal();
+    uiStage = new Stage(new ScreenViewport());
+    skin = new Skin(Gdx.files.internal("uiskin/uiskin.json")); // Potrebuješ uiskin (glej spodaj)
+    Gdx.input.setInputProcessor(uiStage);
+    portalModal = new PortalModal();
+    player.setQuestionModal(questionModal);
+    player.setPortalModal(portalModal);
+    player.setUI(uiStage, skin);
     // Log that we've initialized
     Gdx.app.log("MainGameScreen", "Game screen initialized");
   }
@@ -103,23 +103,23 @@ public class MainGameScreen implements Screen {
     // Clear the screen
     Gdx.gl.glClearColor(0, 0, 0, 1);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-      if (!questionModal.isActive() && !portalModal.isActive()) {
-          // Update game logic
-          currentMap.update(delta);
+    if (!questionModal.isActive() && !portalModal.isActive()) {
+      // Update game logic
+      currentMap.update(delta);
 
-          // Handle map switching
-          if (currentMap.shouldSwitchMap()) {
-              currentMap.dispose();
-              currentMap = MapFactory.createMap(currentMap.getNextMapPath(), player, enemyManager);
-              player.setMap(currentMap);
-              camera.zoom = currentMap.getDefaultZoom();
-          }
-
-          // Camera tracking
-          if (currentMap.shouldCameraTrackPlayer()) {
-              camera.position.set(player.getX() + 32, player.getY() + 32, 0);
-          }
+      // Handle map switching
+      if (currentMap.shouldSwitchMap()) {
+        currentMap.dispose();
+        currentMap = MapFactory.createMap(currentMap.getNextMapPath(), player, enemyManager);
+        player.setMap(currentMap);
+        camera.zoom = currentMap.getDefaultZoom();
       }
+
+      // Camera tracking
+      if (currentMap.shouldCameraTrackPlayer()) {
+        camera.position.set(player.getX() + 32, player.getY() + 32, 0);
+      }
+    }
     // Update camera and render
     camera.update();
 
@@ -129,25 +129,28 @@ public class MainGameScreen implements Screen {
     } else {
       currentMap.render(camera, batch, font);
     }
-      uiStage.act(Gdx.graphics.getDeltaTime());
-      uiStage.draw();
-      if (Gdx.input.isKeyJustPressed(Input.Keys.Q) && !questionModal.isActive()) {
-          QuestionMiniGame miniGame = new QuestionMiniGame();
-          miniGame.load(); // Če je potrebno
+    uiStage.act(Gdx.graphics.getDeltaTime());
+    uiStage.draw();
+    if (Gdx.input.isKeyJustPressed(Input.Keys.Q) && !questionModal.isActive()) {
+      QuestionMiniGame miniGame = new QuestionMiniGame();
+      miniGame.load(); // Če je potrebno
 
-          questionModal.show(uiStage, skin, miniGame,
-              () -> System.out.println("Pravilen odgovor!"),
-              () -> System.out.println("Napačen odgovor ali je potek čas!")
-          );
-      }
+      questionModal.show(
+          uiStage,
+          skin,
+          miniGame,
+          () -> System.out.println("Pravilen odgovor!"),
+          () -> System.out.println("Napačen odgovor ali je potek čas!"));
+    }
 
-      if (Gdx.input.isKeyJustPressed(Input.Keys.P) && !portalModal.isActive()) {
-          portalModal.show(uiStage, skin,
-              () -> System.out.println("✅ Portal odprt!"),
-              () -> System.out.println("❌ Portal zavrnjen!")
-          );
-      }
-      // Tipka za prik
+    if (Gdx.input.isKeyJustPressed(Input.Keys.P) && !portalModal.isActive()) {
+      portalModal.show(
+          uiStage,
+          skin,
+          () -> System.out.println("✅ Portal odprt!"),
+          () -> System.out.println("❌ Portal zavrnjen!"));
+    }
+    // Tipka za prik
   }
 
   @Override

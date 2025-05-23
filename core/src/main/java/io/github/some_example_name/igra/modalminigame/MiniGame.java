@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public interface MiniGame {
-    void render(SpriteBatch batch, BitmapFont font, OrthographicCamera camera);
-    boolean isFinished();
+  void render(SpriteBatch batch, BitmapFont font, OrthographicCamera camera);
+
+  boolean isFinished();
 }

@@ -17,19 +17,13 @@ import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
-
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-
-import java.io.Console;
-
 import io.github.some_example_name.igra.modalminigame.PortalModal;
 import io.github.some_example_name.igra.modalminigame.QuestionMiniGame;
 import io.github.some_example_name.igra.modalminigame.QuestionModal;
-
 import java.util.HashSet;
 import java.util.Set;
-
 
 public class Player {
   private float x, y, speed;
@@ -61,20 +55,23 @@ public class Player {
   // enemies
 
   private QuestionModal questionModal;
-    private PortalModal portalModal;
-    private Stage uiStage;
-    private Skin skin;
+  private PortalModal portalModal;
+  private Stage uiStage;
+  private Skin skin;
 
-    public void setQuestionModal(QuestionModal questionModal) {
-        this.questionModal = questionModal;
-    }
-    public void setPortalModal(PortalModal portalModal) {
-        this.portalModal = portalModal;
-    }
-    public void setUI(Stage uiStage, Skin skin) {
-        this.uiStage = uiStage;
-        this.skin = skin;
-    }
+  public void setQuestionModal(QuestionModal questionModal) {
+    this.questionModal = questionModal;
+  }
+
+  public void setPortalModal(PortalModal portalModal) {
+    this.portalModal = portalModal;
+  }
+
+  public void setUI(Stage uiStage, Skin skin) {
+    this.uiStage = uiStage;
+    this.skin = skin;
+  }
+
   private Set<Enemy> hitEnemies = new HashSet<>();
 
   private final ShapeRenderer shapeRenderer =
@@ -263,34 +260,45 @@ public class Player {
     }
   }
 
-                public void checkFinalBoss() {
-                    if (map instanceof io.github.some_example_name.igra.maps.BossArenaMap) {
-                        if (x > 340 && x < 360 && y > 380 && y < 420) {
-                            // Only trigger if neither modal is active
-                            if (!questionModal.isActive() && !portalModal.isActive()) {
-                                if (Math.random() < 0.5) {
-                                    // Show question modal
-                                    QuestionMiniGame miniGame = new QuestionMiniGame();
-                                    miniGame.load();
-                                    questionModal.show(uiStage, skin, miniGame,
-                                        () -> {System.out.println("✅ Correct!");
-                                        gameOver= true;},
-                                        () -> {System.out.println("❌ Wrong or timeout!");
-                                        y= 300;}
-                                    );
-                                } else {
-                                    // Show portal modal
-                                    portalModal.show(uiStage, skin,
-                                        () -> {System.out.println("✅ Correct!");
-                                            gameOver= true;},
-                                        () -> {System.out.println("❌ Wrong or timeout!");
-                                            y= 300;}
-                                    );
-                                }
-                            }
-                        }
-                    }
-                }
+  public void checkFinalBoss() {
+    if (map instanceof io.github.some_example_name.igra.maps.BossArenaMap) {
+      if (x > 340 && x < 360 && y > 380 && y < 420) {
+        // Only trigger if neither modal is active
+        if (!questionModal.isActive() && !portalModal.isActive()) {
+          if (Math.random() < 0.5) {
+            // Show question modal
+            QuestionMiniGame miniGame = new QuestionMiniGame();
+            miniGame.load();
+            questionModal.show(
+                uiStage,
+                skin,
+                miniGame,
+                () -> {
+                  System.out.println("✅ Correct!");
+                  gameOver = true;
+                },
+                () -> {
+                  System.out.println("❌ Wrong or timeout!");
+                  y = 300;
+                });
+          } else {
+            // Show portal modal
+            portalModal.show(
+                uiStage,
+                skin,
+                () -> {
+                  System.out.println("✅ Correct!");
+                  gameOver = true;
+                },
+                () -> {
+                  System.out.println("❌ Wrong or timeout!");
+                  y = 300;
+                });
+          }
+        }
+      }
+    }
+  }
 
   public void checkEnd(MapObjects endObjects) {
     for (MapObject obj : endObjects) {

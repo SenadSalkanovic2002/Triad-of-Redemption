@@ -1,7 +1,6 @@
 package io.github.some_example_name.igra;
 
 import io.github.some_example_name.igra.maps.BossArenaMap;
-import io.github.some_example_name.igra.maps.LabyrinthMap;
 import io.github.some_example_name.igra.maps.SkeletonMap;
 
 public class MapFactory {
