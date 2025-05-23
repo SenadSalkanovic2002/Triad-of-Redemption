@@ -86,8 +86,7 @@ public class Player{
 
   private Set<Enemy> hitEnemies = new HashSet<>();
 
-  private final ShapeRenderer shapeRenderer =
-      new ShapeRenderer(); // debug thingy for the bounds rectangle
+  private final ShapeRenderer shapeRenderer =  new ShapeRenderer(); // debug thingy for the bounds rectangle
 
   public Player(MainGame game, TextureAtlas texture, Sound damageSound, Sound pickupSound) {
       this.game = game;
@@ -155,7 +154,6 @@ public class Player{
             texture.findRegions(RegionNames.PLAYER_ATTACKING_DOWN),
             Animation.PlayMode.NORMAL);
 
-    generateVisionMask(550);
 
     currentState = CharacterState.IDLE;
     lastDirection = CharacterDirection.RIGHT;
@@ -306,6 +304,7 @@ public class Player{
                 },
                 () -> {
                   System.out.println("❌ Wrong or timeout!");
+                  game.setScreen(new GameOverScreen(this.game));
                   y = 300;
                 });
           }
@@ -354,7 +353,7 @@ public class Player{
     }
   }
 
-  private void generateVisionMask(int diameter) {
+  public void generateVisionMask(int diameter) {
     Pixmap pixmap = new Pixmap(diameter, diameter, Pixmap.Format.RGBA8888);
     int radius = diameter / 2;
 
@@ -391,16 +390,16 @@ public class Player{
     }
 
     batch.end();
-
+/*
     // Debug rectangle
     shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
     shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
     shapeRenderer.setColor(Color.RED);
-    shapeRenderer.rect(bounds.x, bounds.y, bounds.width, bounds.height);
+    shapeRenderer.rect(bounds.x, bounds.y, bounds.width, bounds.height); */
 
-    if (isAttacking && attackHitbox != null) { // Draws the attack hitbox
+   /* if (isAttacking && attackHitbox != null) { // Draws the attack hitbox
       shapeRenderer.rect(attackHitbox.x, attackHitbox.y, attackHitbox.width, attackHitbox.height);
-    }
+    } */
 
     shapeRenderer.end();
 

@@ -11,6 +11,6 @@ public class MapFactory {
     if (mapPath.endsWith("finalBoss.tmx")) return new BossArenaMap(player, enemyManager);
     if (mapPath.endsWith("dungeonMap.tmx")) return new SkeletonMap(player, enemyManager);
 
-    return new DefaultMap(mapPath, player, enemyManager); // Fallback
+    return new DefaultMap(mapPath, player, enemyManager);
   }
 }

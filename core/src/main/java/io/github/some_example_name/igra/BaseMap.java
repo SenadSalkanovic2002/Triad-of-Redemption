@@ -138,7 +138,7 @@ public abstract class BaseMap {
     }
 
     font.draw(batch, "HEALTH: " + player.getHealth(), fontX, fontYHealth);
-    font.draw(batch, "SCORE: " + player.getScore(), fontX, fontYScore);
+    //font.draw(batch, "SCORE: " + player.getScore(), fontX, fontYScore);
 
     if (player.isGameOver()) {
         font.draw(batch, "GAME OVER", 400, 300);

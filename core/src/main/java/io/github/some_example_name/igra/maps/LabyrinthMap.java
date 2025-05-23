@@ -10,5 +10,7 @@ public class LabyrinthMap extends BaseMap {
   }
 
   @Override
-  protected void setupAdditionalLayers() {}
+  protected void setupAdditionalLayers() {
+      player.generateVisionMask(550);
+  }
 }
