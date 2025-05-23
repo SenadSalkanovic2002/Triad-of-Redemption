@@ -1,13 +1,5 @@
 package io.github.some_example_name.igra;
-import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ScreenUtils;
-import io.github.some_example_name.MainGame;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
@@ -27,17 +19,16 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import io.github.some_example_name.MainGame;
 import io.github.some_example_name.igra.modalminigame.PortalModal;
 import io.github.some_example_name.igra.modalminigame.QuestionMiniGame;
 import io.github.some_example_name.igra.modalminigame.QuestionModal;
 import io.github.some_example_name.screens.GameOverScreen;
-import io.github.some_example_name.screens.IntroScreen;
-
 import java.util.HashSet;
 import java.util.Set;
 
-public class Player{
-    public final MainGame game;
+public class Player {
+  public final MainGame game;
   private float x, y, speed;
   private Rectangle bounds;
   private final TextureAtlas texture;
@@ -90,8 +81,8 @@ public class Player{
       new ShapeRenderer(); // debug thingy for the bounds rectangle
 
   public Player(MainGame game, TextureAtlas texture, Sound damageSound, Sound pickupSound) {
-      this.game = game;
-      this.texture = texture;
+    this.game = game;
+    this.texture = texture;
     this.damageSound = damageSound;
     this.pickupSound = pickupSound;
     this.speed = GameConfig.PLAYER_SPEED;
@@ -632,6 +623,4 @@ public class Player{
   public Rectangle getAttackHitbox() {
     return isAttacking ? attackHitbox : null;
   }
-
-
 }

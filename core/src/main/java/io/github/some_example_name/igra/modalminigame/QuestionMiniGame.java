@@ -1,6 +1,5 @@
 package io.github.some_example_name.igra.modalminigame;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;

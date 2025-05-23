@@ -141,10 +141,9 @@ public abstract class BaseMap {
     font.draw(batch, "SCORE: " + player.getScore(), fontX, fontYScore);
 
     if (player.isGameOver()) {
-        font.draw(batch, "GAME OVER", 400, 300);
+      font.draw(batch, "GAME OVER", 400, 300);
 
-    }
-    else if (player.isGameWon()) font.draw(batch, "YOU WIN!", 400, 300);
+    } else if (player.isGameWon()) font.draw(batch, "YOU WIN!", 400, 300);
     batch.end();
 
     player.checkFinalBoss();
