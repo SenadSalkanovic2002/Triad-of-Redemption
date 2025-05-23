@@ -209,19 +209,20 @@ public class Player {
       }
     }
   }
-    public void checkWaterCollisions(MapObjects objects) {
-        for (MapObject obj : objects) {
-            if (obj instanceof RectangleMapObject) {
-                Rectangle rect = ((RectangleMapObject) obj).getRectangle();
-                if (bounds.overlaps(rect)) {
-                    x -= dx();
-                    y -= dy();
-                    bounds.setPosition(x, y);
-                    return;
-                }
-            }
+
+  public void checkWaterCollisions(MapObjects objects) {
+    for (MapObject obj : objects) {
+      if (obj instanceof RectangleMapObject) {
+        Rectangle rect = ((RectangleMapObject) obj).getRectangle();
+        if (bounds.overlaps(rect)) {
+          x -= dx();
+          y -= dy();
+          bounds.setPosition(x, y);
+          return;
         }
+      }
     }
+  }
 
   public void checkTrap(MapObjects traps, long timeSinceLoad) {
     for (MapObject obj : traps) {

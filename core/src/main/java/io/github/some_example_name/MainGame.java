@@ -49,7 +49,6 @@ public class MainGame extends Game {
   public void render() {
     // Let the screen system handle rendering
     super.render();
-
   }
 
   @Override

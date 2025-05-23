@@ -1,6 +1,5 @@
 package io.github.some_example_name.screens;
 
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -21,129 +20,130 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import io.github.some_example_name.MainGame;
 
 public class GameOverScreen implements Screen {
-    private final MainGame game;
-    private OrthographicCamera camera;
-    private Viewport viewport;
-    private Stage stage;
-    private Skin skin;
-    private Texture backgroundTexture;
+  private final MainGame game;
+  private OrthographicCamera camera;
+  private Viewport viewport;
+  private Stage stage;
+  private Skin skin;
+  private Texture backgroundTexture;
 
-    public GameOverScreen(final MainGame game) {
-        this.game = game;
-        camera = new OrthographicCamera();
-        viewport = new FitViewport(1280, 720, camera);
-        stage = new Stage(viewport, game.getBatch());
+  public GameOverScreen(final MainGame game) {
+    this.game = game;
+    camera = new OrthographicCamera();
+    viewport = new FitViewport(1280, 720, camera);
+    stage = new Stage(viewport, game.getBatch());
+  }
+
+  @Override
+  public void show() {
+    Gdx.input.setInputProcessor(stage);
+
+    // Load skin (same as main menu)
+    try {
+      skin = new Skin(Gdx.files.internal("uiskin.json"));
+    } catch (Exception e) {
+      skin = new Skin();
+      BitmapFont font = new BitmapFont();
+      skin.add("default-font", font);
+
+      TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
+      textButtonStyle.font = font;
+      textButtonStyle.fontColor = Color.WHITE;
+      textButtonStyle.downFontColor = Color.LIGHT_GRAY;
+      skin.add("default", textButtonStyle);
+
+      Label.LabelStyle labelStyle = new Label.LabelStyle();
+      labelStyle.font = font;
+      labelStyle.fontColor = Color.WHITE;
+      skin.add("default", labelStyle);
     }
 
-    @Override
-    public void show() {
-        Gdx.input.setInputProcessor(stage);
-
-        // Load skin (same as main menu)
-        try {
-            skin = new Skin(Gdx.files.internal("uiskin.json"));
-        } catch (Exception e) {
-            skin = new Skin();
-            BitmapFont font = new BitmapFont();
-            skin.add("default-font", font);
-
-            TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
-            textButtonStyle.font = font;
-            textButtonStyle.fontColor = Color.WHITE;
-            textButtonStyle.downFontColor = Color.LIGHT_GRAY;
-            skin.add("default", textButtonStyle);
-
-            Label.LabelStyle labelStyle = new Label.LabelStyle();
-            labelStyle.font = font;
-            labelStyle.fontColor = Color.WHITE;
-            skin.add("default", labelStyle);
-        }
-
-        // Load background (same as main menu)
-        try {
-            backgroundTexture = new Texture(Gdx.files.internal("video/ezgif-frame-100.jpg"));
-        } catch (Exception e) {
-            try {
-                backgroundTexture = new Texture(Gdx.files.internal("backgrounds/menu-background.png"));
-            } catch (Exception e2) {
-                Gdx.app.log("GameOverScreen", "Background image not found");
-            }
-        }
-
-        setupUI();
+    // Load background (same as main menu)
+    try {
+      backgroundTexture = new Texture(Gdx.files.internal("video/ezgif-frame-100.jpg"));
+    } catch (Exception e) {
+      try {
+        backgroundTexture = new Texture(Gdx.files.internal("backgrounds/menu-background.png"));
+      } catch (Exception e2) {
+        Gdx.app.log("GameOverScreen", "Background image not found");
+      }
     }
 
-    private void setupUI() {
-        stage.clear();
+    setupUI();
+  }
 
-        if (backgroundTexture != null) {
-            Image background = new Image(backgroundTexture);
-            background.setSize(viewport.getWorldWidth(), viewport.getWorldHeight());
-            stage.addActor(background);
-        }
+  private void setupUI() {
+    stage.clear();
 
-        Table rootTable = new Table();
-        rootTable.setFillParent(true);
+    if (backgroundTexture != null) {
+      Image background = new Image(backgroundTexture);
+      background.setSize(viewport.getWorldWidth(), viewport.getWorldHeight());
+      stage.addActor(background);
+    }
 
-        // Game Over text
-        Label gameOverLabel = new Label("GAME OVER", skin);
-        gameOverLabel.setStyle(new Label.LabelStyle(gameOverLabel.getStyle()));
-        gameOverLabel.getStyle().fontColor = Color.RED;
-        gameOverLabel.setFontScale(3f);
+    Table rootTable = new Table();
+    rootTable.setFillParent(true);
 
-        // Return to main menu button
-        TextButton menuButton = createStyledButton("Return to Main Menu", Color.BLACK);
+    // Game Over text
+    Label gameOverLabel = new Label("GAME OVER", skin);
+    gameOverLabel.setStyle(new Label.LabelStyle(gameOverLabel.getStyle()));
+    gameOverLabel.getStyle().fontColor = Color.RED;
+    gameOverLabel.setFontScale(3f);
 
-        // Layout
-        rootTable.add(gameOverLabel).padBottom(100).row();
-        rootTable.add(menuButton).width(380).height(60);
+    // Return to main menu button
+    TextButton menuButton = createStyledButton("Return to Main Menu", Color.BLACK);
 
-        stage.addActor(rootTable);
+    // Layout
+    rootTable.add(gameOverLabel).padBottom(100).row();
+    rootTable.add(menuButton).width(380).height(60);
 
-        menuButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                game.setScreen(new MainMenuScreen(game));
-            }
+    stage.addActor(rootTable);
+
+    menuButton.addListener(
+        new ChangeListener() {
+          @Override
+          public void changed(ChangeEvent event, Actor actor) {
+            game.setScreen(new MainMenuScreen(game));
+          }
         });
-    }
+  }
 
-    private TextButton createStyledButton(String text, Color color) {
-        TextButton button = new TextButton(text, skin);
-        TextButton.TextButtonStyle style = new TextButton.TextButtonStyle(button.getStyle());
-        style.fontColor = color;
-        style.downFontColor = color.cpy().mul(0.8f);
-        button.setStyle(style);
-        return button;
-    }
+  private TextButton createStyledButton(String text, Color color) {
+    TextButton button = new TextButton(text, skin);
+    TextButton.TextButtonStyle style = new TextButton.TextButtonStyle(button.getStyle());
+    style.fontColor = color;
+    style.downFontColor = color.cpy().mul(0.8f);
+    button.setStyle(style);
+    return button;
+  }
 
-    @Override
-    public void render(float delta) {
-        Gdx.gl.glClearColor(0.1f, 0.1f, 0.2f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+  @Override
+  public void render(float delta) {
+    Gdx.gl.glClearColor(0.1f, 0.1f, 0.2f, 1);
+    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        stage.draw();
-    }
+    stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+    stage.draw();
+  }
 
-    @Override
-    public void resize(int width, int height) {
-        viewport.update(width, height, true);
-    }
+  @Override
+  public void resize(int width, int height) {
+    viewport.update(width, height, true);
+  }
 
-    @Override
-    public void pause() {}
+  @Override
+  public void pause() {}
 
-    @Override
-    public void resume() {}
+  @Override
+  public void resume() {}
 
-    @Override
-    public void hide() {}
+  @Override
+  public void hide() {}
 
-    @Override
-    public void dispose() {
-        stage.dispose();
-        if (skin != null) skin.dispose();
-        if (backgroundTexture != null) backgroundTexture.dispose();
-    }
+  @Override
+  public void dispose() {
+    stage.dispose();
+    if (skin != null) skin.dispose();
+    if (backgroundTexture != null) backgroundTexture.dispose();
+  }
 }
