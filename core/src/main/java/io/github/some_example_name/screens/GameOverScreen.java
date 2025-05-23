@@ -89,13 +89,15 @@ public class GameOverScreen implements Screen {
     gameOverLabel.setStyle(new Label.LabelStyle(gameOverLabel.getStyle()));
     gameOverLabel.getStyle().fontColor = Color.RED;
     gameOverLabel.setFontScale(3f);
+    Table buttonTable = new Table();
 
-    // Return to main menu button
+    // Create buttons with colors
     TextButton menuButton = createStyledButton("Return to Main Menu", Color.BLACK);
+    // Return to main menu button
 
     // Layout
     rootTable.add(gameOverLabel).padBottom(100).row();
-    rootTable.add(menuButton).width(380).height(60);
+    rootTable.add(menuButton).pad(10).width(380).height(60).row();
 
     stage.addActor(rootTable);
 

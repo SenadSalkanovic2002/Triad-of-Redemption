@@ -68,7 +68,7 @@ public abstract class BaseMap {
 
   protected abstract void setupAdditionalLayers();
 
-  private MapObjects getLayerObjects(String name) {
+  protected MapObjects getLayerObjects(String name) {
     MapLayer layer = map.getLayers().get(name);
     return layer != null ? layer.getObjects() : new MapObjects();
   }
@@ -140,7 +140,10 @@ public abstract class BaseMap {
     font.draw(batch, "HEALTH: " + player.getHealth(), fontX, fontYHealth);
     font.draw(batch, "SCORE: " + player.getScore(), fontX, fontYScore);
 
-    if (player.isGameOver()) font.draw(batch, "GAME OVER", 400, 300);
+    if (player.isGameOver()) {
+        font.draw(batch, "GAME OVER", 400, 300);
+
+    }
     else if (player.isGameWon()) font.draw(batch, "YOU WIN!", 400, 300);
     batch.end();
 

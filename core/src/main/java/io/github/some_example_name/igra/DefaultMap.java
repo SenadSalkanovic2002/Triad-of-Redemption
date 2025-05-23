@@ -19,6 +19,6 @@ public class DefaultMap extends BaseMap {
       com.badlogic.gdx.graphics.g2d.SpriteBatch batch,
       com.badlogic.gdx.graphics.g2d.BitmapFont font) {
     super.render(camera, batch, font);
-    player.checkPickup(pickupLayer, damageLayer);
+    //player.checkPickup(pickupLayer, damageLayer);
   }
 }
