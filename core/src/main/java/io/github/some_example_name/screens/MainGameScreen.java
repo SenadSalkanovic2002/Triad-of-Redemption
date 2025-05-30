@@ -80,7 +80,7 @@ public class MainGameScreen implements Screen {
     pickupSound = Gdx.audio.newSound(Gdx.files.internal("tiled/pickup.mp3"));
 
     // Initialize game objects
-    player = new Player( game, playerTexture, damageSound, pickupSound);
+    player = new Player(game, playerTexture, damageSound, pickupSound);
     enemyManager = new EnemyManager(enemyTexture, damageSound, pickupSound);
     currentMap = MapFactory.createMap("tiled/starting.tmx", player, enemyManager);
     camera.zoom = currentMap.getDefaultZoom();
@@ -97,9 +97,11 @@ public class MainGameScreen implements Screen {
     // Log that we've initialized
     Gdx.app.log("MainGameScreen", "Game screen initialized");
   }
+
   public void gameover() {
-      game.setScreen(new GameOverScreen(this.game));
-    }
+    game.setScreen(new GameOverScreen(this.game));
+  }
+
   @Override
   public void render(float delta) {
     // Clear the screen
@@ -181,7 +183,6 @@ public class MainGameScreen implements Screen {
     Gdx.app.log("MainGameScreen", "Game hidden");
   }
 
-
   @Override
   public void dispose() {
     // Dispose resources that were created in this screen
@@ -199,8 +200,5 @@ public class MainGameScreen implements Screen {
     if (currentMap != null) currentMap.dispose();
 
     Gdx.app.log("MainGameScreen", "Game resources disposed");
-
   }
-
-
 }

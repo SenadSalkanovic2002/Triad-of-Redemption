@@ -1,6 +1,5 @@
 package io.github.some_example_name.igra.maps;
 
-import com.badlogic.gdx.maps.MapObjects;
 
 import io.github.some_example_name.igra.BaseMap;
 import io.github.some_example_name.igra.EnemyManager;
@@ -16,4 +15,5 @@ public class SkeletonMap extends BaseMap {
       player.generateVisionMask(5000);
 
   }
+  protected void setupAdditionalLayers() {}
 }
