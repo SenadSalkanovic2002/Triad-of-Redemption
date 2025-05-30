@@ -11,7 +11,6 @@ public class BossArenaMap extends BaseMap {
 
   @Override
   protected void setupAdditionalLayers() {
-      player.generateVisionMask(5000);
-
+    player.generateVisionMask(5000);
   }
 }

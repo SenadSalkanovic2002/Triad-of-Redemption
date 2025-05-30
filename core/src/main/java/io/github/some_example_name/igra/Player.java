@@ -3,7 +3,6 @@ package io.github.some_example_name.igra;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -77,7 +76,8 @@ public class Player {
 
   private Set<Enemy> hitEnemies = new HashSet<>();
 
-  private final ShapeRenderer shapeRenderer =  new ShapeRenderer(); // debug thingy for the bounds rectangle
+  private final ShapeRenderer shapeRenderer =
+      new ShapeRenderer(); // debug thingy for the bounds rectangle
 
   public Player(MainGame game, TextureAtlas texture, Sound damageSound, Sound pickupSound) {
     this.game = game;
@@ -144,7 +144,6 @@ public class Player {
             GameConfig.PLAYER_ANIMATION_ATTACKING_DURATION,
             texture.findRegions(RegionNames.PLAYER_ATTACKING_DOWN),
             Animation.PlayMode.NORMAL);
-
 
     currentState = CharacterState.IDLE;
     lastDirection = CharacterDirection.RIGHT;
@@ -381,14 +380,14 @@ public class Player {
     }
 
     batch.end();
-/*
+    /*
     // Debug rectangle
     shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
     shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
     shapeRenderer.setColor(Color.RED);
     shapeRenderer.rect(bounds.x, bounds.y, bounds.width, bounds.height); */
 
-   /* if (isAttacking && attackHitbox != null) { // Draws the attack hitbox
+    /* if (isAttacking && attackHitbox != null) { // Draws the attack hitbox
       shapeRenderer.rect(attackHitbox.x, attackHitbox.y, attackHitbox.width, attackHitbox.height);
     } */
 
