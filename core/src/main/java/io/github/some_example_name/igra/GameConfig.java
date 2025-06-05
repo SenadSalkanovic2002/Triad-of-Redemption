@@ -22,7 +22,7 @@ public class GameConfig {
   public static final int ENEMY_WIDTH = 32;
   public static final int ENEMY_HEIGHT = 32;
   public static final float ENEMY_SPEED = 50f; // Speed of the player
-  public static final int ENEMY_ATTACK_DAMAGE = 5; // Damage dealt by the player
+  public static final int ENEMY_ATTACK_DAMAGE = 2; // Damage dealt by the player
   public static final int ENEMY_HEALTH = 100; // Health of the player
   public static final float ENEMY_VISION_DISTANCE = 1000.0f;
   public static final int ENEMY_ATTACK_DISTANCE = 20;

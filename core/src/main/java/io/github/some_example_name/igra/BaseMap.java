@@ -1,5 +1,6 @@
 package io.github.some_example_name.igra;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -59,7 +60,33 @@ public abstract class BaseMap {
         player.setPosition(rect.x, rect.y);
         // Only spawn enemies in SkeletonMap
         if (this instanceof io.github.some_example_name.igra.maps.SkeletonMap) {
-          enemyManager.addEnemy(rect.x, rect.y);
+          for (int i = 0; i < 10; i++) {
+                float x, y;
+                Rectangle spawnRect;
+                boolean validSpawn = false;
+                int attempts = 0;
+                do {
+                    x = 10 * map.getProperties().get("tilewidth", Integer.class) +
+                        (float) (Math.random() * ((95 - 10) * map.getProperties().get("tilewidth", Integer.class)));
+                    y = 7 * map.getProperties().get("tileheight", Integer.class) +
+                        (float) (Math.random() * ((60 - 7) * map.getProperties().get("tileheight", Integer.class)));
+                    spawnRect = new Rectangle(x, y, player.getBounds().width, player.getBounds().height);
+                    validSpawn = true;
+                    for (MapObject wall : collisions) {
+                        if (wall instanceof RectangleMapObject) {
+                            Rectangle wallRect = ((RectangleMapObject) wall).getRectangle();
+                            if (wallRect.overlaps(spawnRect)) {
+                                validSpawn = false;
+                                break;
+                            }
+                        }
+                    }
+                    attempts++;
+                } while (!validSpawn && attempts < 100);
+                if (validSpawn) {
+                    enemyManager.addEnemy(x, y);
+                }
+            }
         }
       }
     }
@@ -137,6 +164,15 @@ public abstract class BaseMap {
       fontYHealth += 60;
     }
 
+    if (this instanceof io.github.some_example_name.igra.maps.SkeletonMap) {
+        float fontXX = camera.position.x - font.getRegion().getRegionWidth() / 2;
+        float fontYY = camera.position.y + camera.viewportHeight / (2 / camera.zoom) - 20;
+
+        font.draw(batch, "Number of enemies you need to kill before you can go to the final boss: " + enemyManager.getEnemies().size(), fontXX, fontYY);
+        if (enemyManager.getEnemies().size() <= 0) {
+            font.draw(batch, "You can now go to the final boss! Find the door to him (hint: tombstone)", fontXX, fontYY - 30);
+        }
+    }
     font.draw(batch, "HEALTH: " + player.getHealth(), fontX, fontYHealth);
     // font.draw(batch, "SCORE: " + player.getScore(), fontX, fontYScore);
 
@@ -146,7 +182,9 @@ public abstract class BaseMap {
     } else if (player.isGameWon()) font.draw(batch, "YOU WIN!", 400, 300);
     batch.end();
 
-    player.checkFinalBoss();
+    if (enemyManager.getEnemies().size() <= 0) {
+      player.checkFinalBoss();
+    }
     player.checkCollisions(collisions);
     player.checkTrap(traps, timeSinceLoad());
     player.checkEnd(endZones);
