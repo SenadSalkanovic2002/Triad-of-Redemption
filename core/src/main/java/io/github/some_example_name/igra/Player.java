@@ -23,6 +23,8 @@ import io.github.some_example_name.igra.modalminigame.PortalModal;
 import io.github.some_example_name.igra.modalminigame.QuestionMiniGame;
 import io.github.some_example_name.igra.modalminigame.QuestionModal;
 import io.github.some_example_name.screens.GameOverScreen;
+import io.github.some_example_name.screens.GameVictoryScreen;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -307,7 +309,8 @@ public class Player {
     for (MapObject obj : endObjects) {
       if (obj instanceof RectangleMapObject) {
         if (((RectangleMapObject) obj).getRectangle().overlaps(bounds)) {
-          gameWon = true;
+            game.setScreen(new GameVictoryScreen(this.game));
+            gameWon = true;
         }
       }
     }
