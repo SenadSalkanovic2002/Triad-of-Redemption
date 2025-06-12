@@ -215,7 +215,7 @@ public class Player {
     health -= damage;
     if (health <= 0 && !gameOver) {
       gameOver = true;
-      game.setScreen(new GameOverScreen(this.game));
+      game.setScreen(new GameOverScreen(this.game, false));
       System.out.println("Enemy died!");
     } else {
       System.out.println("Enemy took damage! Remaining HP: " + health);
@@ -267,8 +267,6 @@ public class Player {
       if (x > 340 && x < 360 && y > 380 && y < 420) {
         // Only trigger if neither modal is active
         if (!questionModal.isActive() && !portalModal.isActive()) {
-          if (Math.random() < 0.5) {
-            // Show question modal
             QuestionMiniGame miniGame = new QuestionMiniGame();
             miniGame.load();
             questionModal.show(
@@ -277,27 +275,16 @@ public class Player {
                 miniGame,
                 () -> {
                   System.out.println("✅ Correct!");
-                  gameOver = true;
+                    gameOver = true;
+                    y = 300; // Reset position or handle as needed
+                    game.setScreen(new GameOverScreen(this.game, true));
                 },
                 () -> {
                   System.out.println("❌ Wrong or timeout!");
+                    takeDamage(34);
                   y = 300;
                 });
-          } else {
-            // Show portal modal
-            portalModal.show(
-                uiStage,
-                skin,
-                () -> {
-                  System.out.println("✅ Correct!");
-                  gameOver = true;
-                },
-                () -> {
-                  System.out.println("❌ Wrong or timeout!");
-                  game.setScreen(new GameOverScreen(this.game));
-                  y = 300;
-                });
-          }
+
         }
       }
     }
