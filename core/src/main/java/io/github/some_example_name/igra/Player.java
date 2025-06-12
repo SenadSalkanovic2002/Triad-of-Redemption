@@ -224,7 +224,7 @@ public class Player {
     health -= damage;
     if (health <= 0 && !gameOver) {
       gameOver = true;
-      game.setScreen(new GameOverScreen(this.game, false));
+      game.setScreen(new GameOverScreen(this.game));
       System.out.println("Enemy died!");
     } else {
       System.out.println("Enemy took damage! Remaining HP: " + health);
@@ -286,7 +286,7 @@ public class Player {
                   System.out.println("✅ Correct!");
                     gameOver = true;
                     y = 300; // Reset position or handle as needed
-                    game.setScreen(new GameOverScreen(this.game, true));
+                    game.setScreen(new GameOverScreen(this.game));
                 },
                 () -> {
                   System.out.println("❌ Wrong or timeout!");
