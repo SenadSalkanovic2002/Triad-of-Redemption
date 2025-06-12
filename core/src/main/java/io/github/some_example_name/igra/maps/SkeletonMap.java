@@ -13,6 +13,4 @@ public class SkeletonMap extends BaseMap {
   protected void setupAdditionalLayers() {
     player.generateVisionMask(5000);
   }
-
-  protected void setupAdditionalLayers() {}
 }

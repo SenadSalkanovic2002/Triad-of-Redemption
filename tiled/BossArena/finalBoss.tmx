@@ -743,21 +743,19 @@
  <objectgroup id="18" name="start">
   <object id="12" name="Start" x="344.903" y="529.438" width="30.0234" height="29.2912"/>
  </objectgroup>
- <objectgroup id="17" name="wall">
-  <object id="2" x="165.162" y="296.152" width="26.0353" height="253.031"/>
-  <object id="3" x="197.706" y="544.301" width="87.0556" height="6.50883"/>
+ <objectgroup id="17" name="walla">
+  <object id="2" name="wall" x="165.162" y="296.152" width="26.0353" height="253.031"/>
+  <object id="3" name="wall" x="197.706" y="544.301" width="87.0556" height="6.50883"/>
   <object id="4" x="288.829" y="543.487" width="14.6449" height="222.927"/>
   <object id="5" x="304.288" y="751.77" width="126.922" height="13.8313"/>
   <object id="6" x="417.379" y="544.301" width="14.6449" height="208.282"/>
   <object id="7" x="433.651" y="540.233" width="43.9346" height="8.13603"/>
   <object id="8" x="473.517" y="529.656" width="58.5794" height="15.4585"/>
   <object id="9" x="522.333" y="454.804" width="22.7809" height="75.6651"/>
-  <object id="10" x="532.097" y="290.456" width="15.4585" height="184.688"/>
-  <object id="11" x="184.688" y="312.424" width="350.663" height="21.9673"/>
+  <object id="10" name="wall" x="532.097" y="290.456" width="15.4585" height="184.688"/>
+  <object id="11" name="wall" x="184.688" y="312.424" width="350.663" height="21.9673"/>
   <object id="13" name="wall" x="313.415" y="333.919" width="94.464" height="41.7399"/>
-  <object id="14" name="Wall" x="304.628" y="490.627" width="125.952" height="27.8266"/>
   <object id="15" x="491.359" y="604.13"/>
-  <object id="16" x="337.905" y="629.731"/>
  </objectgroup>
  <imagelayer id="21" name="boss" offsetx="350" offsety="330">
   <image source="bossAnimation.png" width="32" height="32"/>
