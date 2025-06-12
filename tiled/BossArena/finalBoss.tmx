@@ -754,7 +754,6 @@
   <object id="9" x="522.333" y="454.804" width="22.7809" height="75.6651"/>
   <object id="10" name="wall" x="532.097" y="290.456" width="15.4585" height="184.688"/>
   <object id="11" name="wall" x="184.688" y="312.424" width="350.663" height="21.9673"/>
-  <object id="13" name="wall" x="313.415" y="333.919" width="94.464" height="41.7399"/>
   <object id="15" x="491.359" y="604.13"/>
  </objectgroup>
  <imagelayer id="21" name="boss" offsetx="350" offsety="330">
