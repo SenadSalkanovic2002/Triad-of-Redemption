@@ -14,7 +14,7 @@ import java.util.Date;
 public abstract class BaseMap {
   protected TiledMap map;
   protected OrthogonalTiledMapRenderer renderer;
-  protected MapObjects collisions, endZones, bridges, nextMapTriggers, traps;
+  protected MapObjects collisions, endZones, bridges, nextMapTriggers, traps, bossWalls;
   protected MapProperties tmp;
   protected TiledMapTileLayer pickupLayer, damageLayer, trapLayer;
   protected String nextMapPath;
@@ -46,6 +46,7 @@ public abstract class BaseMap {
     nextMapPath = null;
 
     collisions = getLayerObjects("wall");
+    bossWalls = getLayerObjects("walla");
     traps = getLayerObjects("traps");
     endZones = getLayerObjects("end");
     bridges = getLayerObjects("bridgee");
@@ -186,6 +187,7 @@ public abstract class BaseMap {
       player.checkFinalBoss();
     }
     player.checkCollisions(collisions);
+    player.checkCollisions(bossWalls);
     player.checkTrap(traps, timeSinceLoad());
     player.checkEnd(endZones);
     player.checkBridge(bridges);
