@@ -14,7 +14,7 @@ import java.util.Date;
 public abstract class BaseMap {
   protected TiledMap map;
   protected OrthogonalTiledMapRenderer renderer;
-  protected MapObjects collisions, endZones, bridges, nextMapTriggers, traps;
+  protected MapObjects collisions, endZones, bridges, nextMapTriggers, traps, tears;
   protected MapProperties tmp;
   protected TiledMapTileLayer pickupLayer, damageLayer, trapLayer;
   protected String nextMapPath;
@@ -50,6 +50,9 @@ public abstract class BaseMap {
     endZones = getLayerObjects("end");
     bridges = getLayerObjects("bridgee");
     nextMapTriggers = getLayerObjects("next_map");
+    if (this instanceof io.github.some_example_name.igra.maps.LabyrinthMap) {
+        tears = getLayerObjects("tears");
+    }
 
     player.setMap(this);
     enemyManager.setMap(this);
@@ -152,15 +155,15 @@ public abstract class BaseMap {
 
     float fontX = camera.position.x - camera.viewportWidth / (2 / camera.zoom);
     float fontYHealth = camera.position.y - camera.viewportHeight / (2 / camera.zoom);
-    float fontYScore = fontYHealth;
+    float fontYTears = fontYHealth;
 
     if (isSmallerScale) {
       fontX += 5;
-      fontYScore += 20;
+      fontYTears += 20;
       fontYHealth += 30;
     } else {
       fontX += 10;
-      fontYScore += 40;
+      fontYTears += 40;
       fontYHealth += 60;
     }
 
@@ -174,11 +177,14 @@ public abstract class BaseMap {
         }
     }
     font.draw(batch, "HEALTH: " + player.getHealth(), fontX, fontYHealth);
-    // font.draw(batch, "SCORE: " + player.getScore(), fontX, fontYScore);
+
+    if (this instanceof io.github.some_example_name.igra.maps.LabyrinthMap) {
+        font.draw(batch, "Collected " + player.getTearsCollectedCount() + "/3 tears for teleportation", fontX, fontYTears);
+        player.checkTears(tears, map);
+    }
 
     if (player.isGameOver()) {
       font.draw(batch, "GAME OVER", 400, 300);
-
     } else if (player.isGameWon()) font.draw(batch, "YOU WIN!", 400, 300);
     batch.end();
 
@@ -202,7 +208,6 @@ public abstract class BaseMap {
   public float getDefaultZoom() {
     return defaultZoom;
   }
-
   public long timeSinceLoad() {
     return new Date().getTime() - timeOfLoad;
   }
