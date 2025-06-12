@@ -1,5 +1,9 @@
 package io.github.some_example_name.igra.maps;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import io.github.some_example_name.igra.BaseMap;
 import io.github.some_example_name.igra.EnemyManager;
 import io.github.some_example_name.igra.Player;

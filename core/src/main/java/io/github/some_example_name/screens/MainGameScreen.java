@@ -99,7 +99,7 @@ public class MainGameScreen implements Screen {
   }
 
   public void gameover() {
-    game.setScreen(new GameOverScreen(this.game));
+    game.setScreen(new GameOverScreen(this.game, false));
   }
 
   @Override

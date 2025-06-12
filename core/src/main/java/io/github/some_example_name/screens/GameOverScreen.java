@@ -61,7 +61,6 @@ public class GameOverScreen implements Screen {
             Gdx.app.log("GameOverScreen", "Failed to load game over music", e);
         }
 
-        // Load skin (same as main menu)
         try {
             skin = new Skin(Gdx.files.internal("uiskin.json"));
         } catch (Exception e) {
@@ -108,40 +107,39 @@ public class GameOverScreen implements Screen {
         rootTable.setFillParent(true);
         stage.addActor(rootTable);
 
-        // Create split text for animation
         Label.LabelStyle labelStyle = new Label.LabelStyle(skin.get(Label.LabelStyle.class));
         labelStyle.fontColor = Color.RED;
 
-        // Left part of the text that will fly in from left
+
         leftText = new Label("GAME", skin);
         leftText.setStyle(new Label.LabelStyle(labelStyle));
         leftText.setFontScale(3.5f);
         leftText.setPosition(-300, viewport.getWorldHeight() / 2 + 50);
         stage.addActor(leftText);
 
-        // Right part of the text that will fly in from right
+
         rightText = new Label("OVER", skin);
         rightText.setStyle(new Label.LabelStyle(labelStyle));
         rightText.setFontScale(3.5f);
         rightText.setPosition(viewport.getWorldWidth() + 100, viewport.getWorldHeight() / 2 + 50);
         stage.addActor(rightText);
 
-        // Final "GAME OVER" text (initially hidden)
+
         gameOverLabel = new Label("GAME OVER", skin);
         gameOverLabel.setStyle(new Label.LabelStyle(labelStyle));
         gameOverLabel.setFontScale(3.5f);
         gameOverLabel.setPosition(viewport.getWorldWidth() / 2 - 100, viewport.getWorldHeight() / 2 + 50, Align.center);
-        gameOverLabel.getColor().a = 0; // Start invisible
+        gameOverLabel.getColor().a = 0;
         stage.addActor(gameOverLabel);
 
-        // Menu button (initially hidden)
+
         menuButton = createStyledButton("Return to Main Menu", Color.BLACK);
         menuButton.setSize(380, 60);
         menuButton.setPosition(viewport.getWorldWidth() / 2 - 190, viewport.getWorldHeight() / 2 - 100);
-        menuButton.getColor().a = 0; // Start invisible
+        menuButton.getColor().a = 0; 
         stage.addActor(menuButton);
 
-        // Add button listener
+
         menuButton.addListener(
             new ChangeListener() {
                 @Override
@@ -150,7 +148,7 @@ public class GameOverScreen implements Screen {
                 }
             });
 
-        // Start animations for text
+
         leftText.addAction(
             Actions.moveTo(viewport.getWorldWidth() / 2 - 150, viewport.getWorldHeight() / 2 + 50,
                 COLLISION_TIME, Interpolation.swingOut)
@@ -176,13 +174,12 @@ public class GameOverScreen implements Screen {
 
         animationTime += delta;
 
-        // When letters collide
+
         if (animationTime >= COLLISION_TIME && gameOverLabel.getColor().a == 0) {
-            // Hide the individual letters
+      
             leftText.addAction(Actions.fadeOut(0.3f));
             rightText.addAction(Actions.fadeOut(0.3f));
 
-            // Show the combined text with a shake effect
             gameOverLabel.addAction(Actions.sequence(
                 Actions.fadeIn(0.2f),
                 Actions.moveBy(5, 0, 0.05f),
@@ -194,7 +191,6 @@ public class GameOverScreen implements Screen {
             ));
         }
 
-        // Show the menu button after the animation
         if (animationTime >= BUTTON_APPEAR_TIME && menuButton.getColor().a == 0) {
             menuButton.addAction(Actions.sequence(
                 Actions.fadeIn(0.5f),
