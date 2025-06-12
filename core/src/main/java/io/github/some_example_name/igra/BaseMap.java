@@ -14,7 +14,7 @@ import java.util.Date;
 public abstract class BaseMap {
   protected TiledMap map;
   protected OrthogonalTiledMapRenderer renderer;
-  protected MapObjects collisions, endZones, bridges, nextMapTriggers, traps, bossWalls tears;
+  protected MapObjects collisions, endZones, bridges, nextMapTriggers, traps, bossWalls, tears;
   protected MapProperties tmp;
   protected TiledMapTileLayer pickupLayer, damageLayer, trapLayer;
   protected String nextMapPath;
