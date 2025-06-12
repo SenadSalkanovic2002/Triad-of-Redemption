@@ -1,5 +1,6 @@
 package io.github.some_example_name.igra;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -32,7 +34,7 @@ public class Player {
   private Rectangle bounds;
   private final TextureAtlas texture;
   private final Sound damageSound, pickupSound;
-  private int health, score;
+  private int health, score, tearsCollectedCount;
   private boolean gameOver, gameWon, inSlowZone;
   private BaseMap map;
   private Animation<TextureRegion> idle,
@@ -86,6 +88,7 @@ public class Player {
     this.pickupSound = pickupSound;
     this.speed = GameConfig.PLAYER_SPEED;
     this.health = GameConfig.PLAYER_HEALTH;
+    this.tearsCollectedCount = 0;
     this.score = 0;
     this.gameOver = false;
     this.gameWon = false;
@@ -190,6 +193,10 @@ public class Player {
     x += dx;
     y += dy;
     bounds.setPosition(x, y);
+
+    if(Gdx.input.isKeyPressed(Input.Keys.L)){
+        tearsCollectedCount = 3;
+    }
   }
 
   public void attackEnemies(EnemyManager enemyManager) {
@@ -298,6 +305,36 @@ public class Player {
         }
       }
     }
+  }
+
+  public void checkTears(MapObjects tears, TiledMap map){
+      //Teleport to next map when found 3 tears
+      if(tearsCollectedCount == 3){
+        setPosition(883.62604f,  1881.0365f);
+      }
+
+      for (MapObject obj: tears){
+          if (obj instanceof RectangleMapObject) {
+              Rectangle rect = ((RectangleMapObject) obj).getRectangle();
+              if (bounds.overlaps(rect)) {
+                  this.tearsCollectedCount += 1;
+
+                  map.getLayers().get("tears").getObjects().remove(obj);
+                  // calculate tile coordinates
+                  int tileX = (int) ((this.getX() + (float) GameConfig.PLAYER_WIDTH_SMALLER / 2) / 16);
+                  int tileY = (int) ((this.getY() + (float) GameConfig.PLAYER_HEIGHT_SMALLER / 2) / 16);
+
+                  //Remove tile
+                  TiledMapTileLayer obstacleLayer = (TiledMapTileLayer) map.getLayers().get("Tears");
+                  obstacleLayer.setCell(tileX, tileY, null);
+                  obstacleLayer.setCell(tileX+1, tileY, null);
+                  obstacleLayer.setCell(tileX-1, tileY, null);
+                  obstacleLayer.setCell(tileX, tileY+1, null);
+                  obstacleLayer.setCell(tileX, tileY-1, null);
+                  return;
+              }
+          }
+      }
   }
 
   public void checkPickup(TiledMapTileLayer pickup, TiledMapTileLayer damage) {
@@ -412,6 +449,10 @@ public class Player {
 
   public int getHealth() {
     return health;
+  }
+
+  public int getTearsCollectedCount(){
+      return tearsCollectedCount;
   }
 
   public int getScore() {
